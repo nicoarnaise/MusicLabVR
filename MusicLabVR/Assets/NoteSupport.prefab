@@ -98,7 +98,7 @@ Transform:
   m_GameObject: {fileID: 1960417353128208}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 2, z: 4}
-  m_LocalScale: {x: 0.1, y: 0.10000006, z: 0.10000006}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4071201328693612}
   m_Father: {fileID: 4254862670256474}
@@ -301,5 +301,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idleMaterial: {fileID: 2100000, guid: 041c001656ca0cd4a8d0deb0b5eabb60, type: 2}
-  playMaterial: {fileID: 2100000, guid: b26398c39c62bc84bbe90be853ffd322, type: 2}
+  playMaterial: {fileID: 2100000, guid: 041c001656ca0cd4a8d0deb0b5eabb60, type: 2}
   play: 0
