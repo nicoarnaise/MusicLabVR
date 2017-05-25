@@ -127,7 +127,8 @@ public class SteamVR_LaserPointer : MonoBehaviour
         {
             dist = hit.distance;
         }
-        hit.transform.GetComponent<NoteScript>().Play();
+        
+		hit.transform.GetComponent<NoteScript>().Play();
 
         if (controller != null && controller.triggerPressed)
         {
