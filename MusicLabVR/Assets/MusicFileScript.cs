@@ -8,15 +8,15 @@ using System.IO;
 public class MusicFileScript : MonoBehaviour {
 
 	public String fileName;
-	private AudioSource audioSource;
-	private AudioClip[] audioClip;
+	public GameObject[] notes;
+	// private AudioClip[] audioClip;
 
 	private int numberNote;
 	private int noteIndex;
 	private JsonTestClass.MusicalFile musicFile;
 
 	void Start () {
-		audioClip = new AudioClip[84];
+		/*audioClip = new AudioClip[84];
 		audioClip [0] = (AudioClip)Resources.Load ("Piano1mp3/do1");
 		audioClip [1] = (AudioClip)Resources.Load ("Piano1mp3/do#1");
 		audioClip [2] = (AudioClip)Resources.Load ("Piano1mp3/re1");
@@ -112,9 +112,9 @@ public class MusicFileScript : MonoBehaviour {
 		audioClip [80] = (AudioClip)Resources.Load ("Piano7mp3/sol#7");
 		audioClip [81] = (AudioClip)Resources.Load ("Piano7mp3/la7");
 		audioClip [82] = (AudioClip)Resources.Load ("Piano7mp3/la#7");
-		audioClip [83] = (AudioClip)Resources.Load ("Piano7mp3/si7");
+		audioClip [83] = (AudioClip)Resources.Load ("Piano7mp3/si7");*/
 
-		audioSource = this.gameObject.GetComponent<AudioSource> ();
+		// audioSource = this.gameObject.GetComponent<AudioSource> ();
 
 		String newPath =  Path.Combine("StreamingAssets", fileName); // Get Path to file in resources folder without .json !
 		String savedString = JsonTestClass.LoadJSONFromFile(newPath); // Load Json from file
@@ -132,7 +132,8 @@ public class MusicFileScript : MonoBehaviour {
 	{
 		if (noteIndex < numberNote) {
 			int clipIndex = musicFile.musicalNote [noteIndex].noteName + 12*musicFile.musicalNote [noteIndex].noteOctave;
-			audioSource.PlayOneShot (audioClip [clipIndex]);
+			notes[clipIndex].GetComponent<NoteScript> ().Play (); 
+			//audioSource.PlayOneShot (audioClip [clipIndex]);
 			Debug.Log (clipIndex);
 			yield return new WaitForSeconds (musicFile.musicalNote [noteIndex].noteTempo);
 			noteIndex++;
