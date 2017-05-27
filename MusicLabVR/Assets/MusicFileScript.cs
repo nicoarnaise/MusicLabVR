@@ -132,10 +132,12 @@ public class MusicFileScript : MonoBehaviour {
 	{
 		if (noteIndex < numberNote) {
 			int clipIndex = musicFile.musicalNote [noteIndex].noteName + 12*musicFile.musicalNote [noteIndex].noteOctave;
-			notes [clipIndex].GetComponent<NoteScript> ().Play ();
-			notes [clipIndex].GetComponent<NoteScript> ().GetComponent<AudioSource>().SetScheduledEndTime(AudioSettings.dspTime + (double) (musicFile.musicalNote [noteIndex].noteTempo));
-			//audioSource.PlayOneShot (audioClip [clipIndex]);
-			Debug.Log (clipIndex);
+			if (clipIndex < 84) {
+				notes [clipIndex].GetComponent<NoteScript> ().Play ();
+				notes [clipIndex].GetComponent<NoteScript> ().GetComponent<AudioSource>().SetScheduledEndTime(AudioSettings.dspTime + (double) (musicFile.musicalNote [noteIndex].noteTempo) + 0.2d);
+				//audioSource.PlayOneShot (audioClip [clipIndex]);
+			}
+
 			yield return new WaitForSeconds (musicFile.musicalNote [noteIndex].noteTempo);
 			noteIndex++;
 
