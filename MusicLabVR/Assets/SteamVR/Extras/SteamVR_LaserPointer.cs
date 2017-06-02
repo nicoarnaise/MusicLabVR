@@ -1,6 +1,7 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 using UnityEngine;
 using System.Collections;
+using Valve.VR;
 
 public struct PointerEventArgs
 {
@@ -23,14 +24,22 @@ public class SteamVR_LaserPointer : MonoBehaviour
     bool isActive = false;
     public bool addRigidBody = false;
     public Transform reference;
+    public TimeLineScript TLS;
+
     public event PointerEventHandler PointerIn;
     public event PointerEventHandler PointerOut;
+
+    private bool triggerPressedBefore;
+    private bool touchedBefore;
 
     Transform previousContact = null;
 
 	// Use this for initialization
 	void Start ()
     {
+        triggerPressedBefore = false;
+        touchedBefore = false;
+
         holder = new GameObject();
         holder.transform.parent = this.transform;
         holder.transform.localPosition = Vector3.zero;
@@ -128,16 +137,54 @@ public class SteamVR_LaserPointer : MonoBehaviour
             dist = hit.distance;
         }
 
-        if (controller != null && controller.triggerPressed)
+        if (controller != null && controller.triggerPressed && !triggerPressedBefore)
         {
-            hit.transform.GetComponent<NoteScript>().Play();
-            hit.transform.GetComponent<LengthBtnScript>().Select();
-            hit.transform.GetComponent<MusicBtnScript>().DoAction();
+            triggerPressedBefore = true;
+            NoteScript NS = hit.transform.GetComponent<NoteScript>();
+            LengthBtnScript LB = hit.transform.GetComponent<LengthBtnScript>();
+            MusicBtnScript MB = hit.transform.GetComponent<MusicBtnScript>();
+            if (NS)
+                NS.Play();
+            if (LB)
+                LB.Select();
+            if(MB)
+                MB.DoAction();
             pointer.transform.localScale = new Vector3(thickness * 5f, thickness * 5f, dist);
         }
         else
         {
+            if(controller != null && !controller.triggerPressed)
+                triggerPressedBefore = false;
             pointer.transform.localScale = new Vector3(thickness, thickness, dist);
+        }
+
+        SteamVR_Controller.Device device = SteamVR_Controller.Input((int)controller.controllerIndex);
+        //If finger is on touchpad
+        if (device.GetTouch(SteamVR_Controller.ButtonMask.Touchpad) && !touchedBefore)
+        {
+            touchedBefore = true;
+            //Read the touchpad values
+            Vector2 touchpad = device.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
+
+            // handle rotation via touchpad
+            if (touchpad.x > 0.3f)
+            {
+                TLS.pageToShow++;
+            }
+            else
+            {
+                if (touchpad.x < -0.3f)
+                {
+                    TLS.pageToShow--;
+                }
+            }
+        }
+        else
+        {
+            if (!device.GetTouch(SteamVR_Controller.ButtonMask.Touchpad))
+            {
+                touchedBefore = false;
+            }
         }
         pointer.transform.localPosition = new Vector3(0f, 0f, dist/2f);
     }

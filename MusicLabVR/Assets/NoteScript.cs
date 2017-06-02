@@ -13,8 +13,11 @@ public class NoteScript : MonoBehaviour {
     private AudioSource audioS;
     private Renderer rend;
 
+    private int refresh;
+
 	// Use this for initialization
 	void Start () {
+        refresh = 0;
         audioS = transform.GetComponent<AudioSource>();
         rend = transform.GetComponent<Renderer>();
         TimeLine = transform.parent.parent.GetComponent<OctaveScript>().TimeLine;
@@ -40,18 +43,26 @@ public class NoteScript : MonoBehaviour {
 
     public void Play(){
         audioS.Play();
-        TimeLine.AddNote(this, Octave);
+        string addon = "";
+        if (transform.name.EndsWith("b"))
+            addon = "b";
+        if (transform.name.EndsWith("d"))
+            addon = "#";
+        TimeLine.AddNote(this, Octave, addon);
     }
 
     // play the note for time seconds
     public void PlayT(float time)
     {
+        refresh++;
         audioS.Play();
         Invoke("Stop", time);
     }
 
     private void Stop()
     {
-        audioS.Stop();
+        refresh--;
+        if(refresh == 0)
+            audioS.Stop();
     }
 }
