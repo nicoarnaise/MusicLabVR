@@ -127,11 +127,12 @@ public class SteamVR_LaserPointer : MonoBehaviour
         {
             dist = hit.distance;
         }
-        
-		hit.transform.GetComponent<NoteScript>().Play();
 
         if (controller != null && controller.triggerPressed)
         {
+            hit.transform.GetComponent<NoteScript>().Play();
+            hit.transform.GetComponent<LengthBtnScript>().Select();
+            hit.transform.GetComponent<MusicBtnScript>().DoAction();
             pointer.transform.localScale = new Vector3(thickness * 5f, thickness * 5f, dist);
         }
         else

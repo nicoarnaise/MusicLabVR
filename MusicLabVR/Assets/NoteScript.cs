@@ -8,6 +8,8 @@ public class NoteScript : MonoBehaviour {
     public Material playMaterial;
     public bool play = false;
 
+    private int Octave;
+    private TimeLineScript TimeLine;
     private AudioSource audioS;
     private Renderer rend;
 
@@ -15,14 +17,16 @@ public class NoteScript : MonoBehaviour {
 	void Start () {
         audioS = transform.GetComponent<AudioSource>();
         rend = transform.GetComponent<Renderer>();
-	}
+        TimeLine = transform.parent.parent.GetComponent<OctaveScript>().TimeLine;
+        Octave = transform.parent.parent.GetComponent<OctaveScript>().Octave;
+    }
 
     void Update()
     {
         if (play)
         {
-            Play();
             play = false;
+            Play();
         }
         if (!audioS.isPlaying)
         {
@@ -36,7 +40,18 @@ public class NoteScript : MonoBehaviour {
 
     public void Play(){
         audioS.Play();
+        TimeLine.AddNote(this, Octave);
     }
 
+    // play the note for time seconds
+    public void PlayT(float time)
+    {
+        audioS.Play();
+        Invoke("Stop", time);
+    }
 
+    private void Stop()
+    {
+        audioS.Stop();
+    }
 }
