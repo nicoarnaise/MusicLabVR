@@ -8,6 +8,8 @@ using System.IO;
 public class MusicFileScript : MonoBehaviour {
 
 	public String fileName;
+	private List<KeyValuePair<NoteScript, float>> partition;
+
 	public GameObject[] notes;
 	// private AudioClip[] audioClip;
 
@@ -19,19 +21,36 @@ public class MusicFileScript : MonoBehaviour {
     private float startTime;
 
 	void Start () {
+		
+		startTime = Time.time;
+		String newPath = Path.Combine("StreamingAssets", fileName); // Get Path to file in resources folder without .json !
+		String savedString = JsonTestClass.LoadJSONFromFile(newPath); // Load Json from file
+
+		musicFile = new JsonTestClass.MusicalFile();
+		musicFile = JsonTestClass.JSONToObject(savedString);  // Create Object from Json
+
+		numberNote = musicFile.numberNote;
+
+		partition = new List<KeyValuePair<NoteScript, float>>();
+		for (int i = 0; i < numberNote; i++) {
+
+			int clipIndex = musicFile.musicalNote[i].noteName + 12 * musicFile.musicalNote[i].noteOctave;
+			float clipDuration = musicFile.musicalNote[i].noteTempo;
+			if (clipIndex < 84) {
+				partition.Add (new KeyValuePair<NoteScript, float> (notes [clipIndex].GetComponent<NoteScript> (), clipDuration));
+
+			} else {
+				partition.Add (new KeyValuePair<NoteScript, float> (null, clipDuration));
+
+			}
+
+		}
         Play();
 	}
 
     public void Play()
     {
-        startTime = Time.time;
-        String newPath = Path.Combine("StreamingAssets", fileName); // Get Path to file in resources folder without .json !
-        String savedString = JsonTestClass.LoadJSONFromFile(newPath); // Load Json from file
-
-        musicFile = new JsonTestClass.MusicalFile();
-        musicFile = JsonTestClass.JSONToObject(savedString);  // Create Object from Json
-
-        numberNote = musicFile.numberNote;
+       
         noteIndex = 0;
         currentTime = 0f;
 
@@ -61,5 +80,21 @@ public class MusicFileScript : MonoBehaviour {
             // Repeat this routine again
             StartCoroutine(playMusic());
         }
+	}
+
+	public bool partitionMatch(List<KeyValuePair<NoteScript, float>> toCompare){
+		bool result = true;
+		if (toCompare.Count != partition.Count) {
+			result = false;
+		}
+		else{
+				for(int i=0; i< toCompare.Count; i++){
+				if ((partition[i].Key != toCompare[i].Key) || (partition[i].Value != toCompare[i].Value)){
+						result = false;
+						break;
+					}
+				}
+			}
+		return result;
 	}
 }

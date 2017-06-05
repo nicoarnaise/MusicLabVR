@@ -26,7 +26,7 @@ public class TimeLineScript : MonoBehaviour {
     
 
     // list Note and their duration
-    private List<KeyValuePair<NoteScript, float>> partition;
+    public List<KeyValuePair<NoteScript, float>> partition;
 
     // list NoteTimeLine
     private List<Page> pages;

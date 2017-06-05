@@ -7,9 +7,11 @@ public class MusicBtnScript : MonoBehaviour {
     public MusicFileScript[] MFS;
     public bool doAct = false;
 
+	private TimeLineScript timeLineScript;
+
 	// Use this for initialization
 	void Start () {
-		
+		timeLineScript = transform.parent.parent.GetComponentInChildren<TimeLineScript> ();
 	}
 	
 	// Update is called once per frame
@@ -33,11 +35,17 @@ public class MusicBtnScript : MonoBehaviour {
             {
                 mf.StopAllCoroutines();
             }
-            transform.parent.parent.GetComponentInChildren<TimeLineScript>().StopAllCoroutines();
+			timeLineScript.StopAllCoroutines();
         }
         if (gameObject.name.Equals("rest"))
-            transform.parent.parent.GetComponentInChildren<TimeLineScript>().AddRest();
-        if (gameObject.name.Equals("play"))
-            transform.parent.parent.GetComponentInChildren<TimeLineScript>().Play();
+			timeLineScript.AddRest();
+		if (gameObject.name.Equals ("play")) {
+			timeLineScript.Play ();
+			if (MFS [0].partitionMatch (timeLineScript.partition)) {
+				Debug.Log ("Level Complete !");
+			} else {
+				Debug.Log ("Your composition does not match yet");
+			}
+		}
     }
 }

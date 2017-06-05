@@ -1,0 +1,8 @@
+{"musicalNote":
+	[ {"noteName":0,"noteOctave":3,"noteTempo":1},
+	{"noteName":4,"noteOctave":3,"noteTempo":1},
+	{"noteName":7,"noteOctave":3,"noteTempo":1},
+	{"noteName":11,"noteOctave":3,"noteTempo":2},
+	{"noteName":7,"noteOctave":3,"noteTempo":1},
+	{"noteName":9,"noteOctave":3,"noteTempo":3}],
+"numberNote":6}
