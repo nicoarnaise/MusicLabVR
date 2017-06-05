@@ -22,7 +22,6 @@ public class MusicFileScript : MonoBehaviour {
 
 	void Start () {
 		
-		startTime = Time.time;
 		String newPath = Path.Combine("StreamingAssets", fileName); // Get Path to file in resources folder without .json !
 		String savedString = JsonTestClass.LoadJSONFromFile(newPath); // Load Json from file
 
@@ -50,7 +49,8 @@ public class MusicFileScript : MonoBehaviour {
 
     public void Play()
     {
-       
+
+		startTime = Time.time;
         noteIndex = 0;
         currentTime = 0f;
 

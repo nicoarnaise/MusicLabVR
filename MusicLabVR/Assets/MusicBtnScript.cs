@@ -5,6 +5,7 @@ using UnityEngine;
 public class MusicBtnScript : MonoBehaviour {
 
     public MusicFileScript[] MFS;
+	public GameObject prefabWin;
     public bool doAct = false;
 
 	private TimeLineScript timeLineScript;
@@ -42,10 +43,15 @@ public class MusicBtnScript : MonoBehaviour {
 		if (gameObject.name.Equals ("play")) {
 			timeLineScript.Play ();
 			if (MFS [0].partitionMatch (timeLineScript.partition)) {
+				Instantiate (prefabWin);
 				Debug.Log ("Level Complete !");
 			} else {
 				Debug.Log ("Your composition does not match yet");
 			}
 		}
+		if (gameObject.name.Equals ("WinObject")) {
+			//TODO
+		}
+			
     }
 }
