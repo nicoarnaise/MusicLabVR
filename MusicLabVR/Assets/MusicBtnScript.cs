@@ -12,7 +12,6 @@ public class MusicBtnScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		timeLineScript = transform.parent.parent.GetComponentInChildren<TimeLineScript> ();
 	}
 	
 	// Update is called once per frame
@@ -26,6 +25,8 @@ public class MusicBtnScript : MonoBehaviour {
 
     public void DoAction()
     {
+		timeLineScript = transform.parent.parent.GetComponentInChildren<TimeLineScript> ();
+
         if (gameObject.name.Equals("playSample"))
             foreach (MusicFileScript mf in MFS){
                 mf.Play();
@@ -43,7 +44,7 @@ public class MusicBtnScript : MonoBehaviour {
 		if (gameObject.name.Equals ("play")) {
 			timeLineScript.Play ();
 			if (MFS [0].partitionMatch (timeLineScript.partition)) {
-				Instantiate (prefabWin);
+				Instantiate (prefabWin, transform.parent.parent.parent, true);
 				Debug.Log ("Level Complete !");
 			} else {
 				Debug.Log ("Your composition does not match yet");
