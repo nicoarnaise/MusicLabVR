@@ -137,18 +137,25 @@ public class SteamVR_LaserPointer : MonoBehaviour
             dist = hit.distance;
         }
 
+        // user can play notes by keeping trigger pressed if they have nothing selected for note duration.
+        NoteScript NS = hit.transform.GetComponent<NoteScript>();
+        if (NS && !NS.transform.parent.parent.GetComponent<OctaveScript>().TimeLine.GetComponent<TimeLineScript>().selected)
+            triggerPressedBefore = false;
+
         if (controller != null && controller.triggerPressed && !triggerPressedBefore)
         {
             triggerPressedBefore = true;
-            NoteScript NS = hit.transform.GetComponent<NoteScript>();
             LengthBtnScript LB = hit.transform.GetComponent<LengthBtnScript>();
             MusicBtnScript MB = hit.transform.GetComponent<MusicBtnScript>();
+            NoteTimeLineScript NTL = hit.transform.GetComponent<NoteTimeLineScript>();
             if (NS)
                 NS.Play();
             if (LB)
                 LB.Select();
             if(MB)
                 MB.DoAction();
+            if (NTL)
+                NTL.openMenu();
             pointer.transform.localScale = new Vector3(thickness * 5f, thickness * 5f, dist);
         }
         else
