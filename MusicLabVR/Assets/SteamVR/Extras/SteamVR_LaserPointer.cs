@@ -148,6 +148,7 @@ public class SteamVR_LaserPointer : MonoBehaviour
             LengthBtnScript LB = hit.transform.GetComponent<LengthBtnScript>();
             MusicBtnScript MB = hit.transform.GetComponent<MusicBtnScript>();
             NoteTimeLineScript NTL = hit.transform.GetComponent<NoteTimeLineScript>();
+            MenuPrefScript MP = hit.transform.GetComponent<MenuPrefScript>();
             if (NS)
                 NS.Play();
             if (LB)
@@ -156,6 +157,8 @@ public class SteamVR_LaserPointer : MonoBehaviour
                 MB.DoAction();
             if (NTL)
                 NTL.openMenu();
+            if (MP)
+                MP.doAct();
             pointer.transform.localScale = new Vector3(thickness * 5f, thickness * 5f, dist);
         }
         else

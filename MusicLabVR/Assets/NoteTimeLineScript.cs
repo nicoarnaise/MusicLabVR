@@ -37,6 +37,7 @@ public class NoteTimeLineScript : MonoBehaviour {
         {
             childMenu = Instantiate(menuPref, transform.parent, false);
             childMenu.transform.localPosition = new Vector3(transform.localPosition.x, 0.003f, menuZ);
+            childMenu.GetComponent<MenuPrefScript>().target = this;
         }
     }
 }

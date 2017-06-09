@@ -24,7 +24,7 @@ public class TimeLineScript : MonoBehaviour {
     private int noteIndex;
     private int pageShown;
 
-    private int indexToInsert;
+    public int indexToInsert;
     
 
     // list Note and their duration
