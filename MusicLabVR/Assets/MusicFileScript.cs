@@ -82,14 +82,14 @@ public class MusicFileScript : MonoBehaviour {
         }
 	}
 
-	public bool partitionMatch(List<KeyValuePair<NoteScript, float>> toCompare){
+	public bool partitionMatch(List<Note> toCompare){
 		bool result = true;
 		if (toCompare.Count != partition.Count) {
 			result = false;
 		}
 		else{
 				for(int i=0; i< toCompare.Count; i++){
-				if ((partition[i].Key != toCompare[i].Key) || (partition[i].Value != toCompare[i].Value)){
+				if ((partition[i].Key != toCompare[i].NoteToPlay) || (partition[i].Value != toCompare[i].nbFourth/4)){
 						result = false;
 						break;
 					}

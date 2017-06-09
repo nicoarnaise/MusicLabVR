@@ -23,17 +23,19 @@ public class TimeLineScript : MonoBehaviour {
     private float currentTime;
     private int noteIndex;
     private int pageShown;
+
+    private int indexToInsert;
     
 
     // list Note and their duration
     public List<Note> partition;
 
     // list NoteTimeLine
-    private List<Page> pages;
 
 	// Use this for initialization
 	void Start () {
         nbFourth = 0;
+        indexToInsert = -1;
         if (nbLine == 2)
         {
             Z1 = 2.4f;
@@ -45,15 +47,13 @@ public class TimeLineScript : MonoBehaviour {
             Z2 = 0;
         }
         partition = new List<Note>();
-        pages = new List<Page>();
         // creation of the first page
-        pages.Add(new Page());
         pageToShow = 0;
         pageShown = 0;
     }
 
     void Update() {
-        if (pageToShow < pages.Count && pageToShow > -1)
+        if (pageToShow > pageShown && !partition[partition.Count - 1].NoteTimeLine.activeSelf || pageToShow < pageShown && pageToShow > -1)
             showPage(pageToShow);
         else
             pageToShow = pageShown;
@@ -61,30 +61,71 @@ public class TimeLineScript : MonoBehaviour {
 
     private void showPage(int pToShow)
     {
-        if(pToShow != pageShown && pToShow < pages.Count && pToShow > -1)
+        if(pToShow < pageShown && pToShow > -1 || pToShow > pageShown && !partition[partition.Count-1].NoteTimeLine.activeSelf)
         {
-            if (GetComponentInChildren<MenuPrefScript>().gameObject)
+            if (GetComponentInChildren<MenuPrefScript>())
                 Destroy(GetComponentInChildren<MenuPrefScript>().transform.parent.gameObject);
 
             pageToShow = pToShow;
-            foreach(Note note in pages[pageShown].content)
+            int index = 0;
+            foreach (Note note in partition)
             {
-                note.NoteTimeLine.SetActive(false);
+                note.setIndexInPartition(index);
+                index++;
+                if(note.NoteTimeLine.activeSelf)
+                    note.NoteTimeLine.SetActive(false);
             }
+
             pageShown = pageToShow;
-            foreach (Note note in pages[pageShown].content)
+            index = 0;
+            for (int page = 0; page <= pageShown; page++)
             {
-                note.NoteTimeLine.SetActive(true);
+                nbFourth = 0;
+                Note note = partition[index];
+                while (nbFourth + note.nbFourth < nbFourthMax)
+                {
+                    if (page == pageShown)
+                    {
+                        note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
+                        note.NoteTimeLine.SetActive(true);
+                    }
+                    note.page = page;
+                    nbFourth += note.nbFourth;
+                    index++;
+                    if(index < partition.Count)
+                        note = partition[index];
+                    else
+                        break;
+                }
+                if (index >= partition.Count && page < pageShown)
+                {
+                    nbFourth = 0;
+                    pageShown = page;
+                    index = partition.Count - 1;
+                    while (partition[index].page == pageShown)
+                        index--;
+                    index++;
+                    while (index < partition.Count)
+                    {
+                        note = partition[index];
+                        note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
+                        note.NoteTimeLine.SetActive(true);
+                        nbFourth += note.nbFourth;
+                        index++;
+                    }
+                    break;
+                }
             }
-            nbFourth = pages[pageShown].nbFourth;
         }
     }
 
-    public void AddNote(NoteScript Note, int Octave, string addon)
+    public void AddNote(NoteScript noteS, int Octave, string addon)
     {
         if (selected)
         {
-            showPage(pages.Count - 1);
+            // show the last page (here by giving the partition length, we know it would be over the number of pages)
+            if(indexToInsert == -1)
+                showPage(partition.Count);
 
             GameObject newNoteGO = Instantiate(NoteTimeLineRef, transform, false);
             newNoteGO.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + (selected.value * 2) - 1), Ypos,Z1);
@@ -93,26 +134,24 @@ public class TimeLineScript : MonoBehaviour {
                 newNoteGO.GetComponentInChildren<TextMesh>().text = "" + Octave + "\n" + addon;
             else
                 newNoteGO.GetComponentInChildren<TextMesh>().text = "" + Octave;
-            newNoteGO.GetComponent<Renderer>().material = Note.idleMaterial;
+            newNoteGO.GetComponent<Renderer>().material = noteS.idleMaterial;
 
-            if(nbFourth + selected.value * 4 > nbFourthMax)
+            Note newNote = new Note(newNoteGO, noteS, pageShown, partition.Count - 1, (int)(selected.value * 4));
+            if (indexToInsert > -1)
+                AddAt(newNote, indexToInsert);
+            else
             {
-                foreach(Note note in pages[pages.Count - 1].content)
+                partition.Add(newNote);
+                if (nbFourth + selected.value * 4 > nbFourthMax)
                 {
-                    note.NoteTimeLine.SetActive(false);
+                    newNote.NoteTimeLine.SetActive(false);
+                    showPage(pageShown + 1);
                 }
-                // add new page
-                pages.Add(new Page());
-                nbFourth = 0;
-                pageToShow++;
-                pageShown++;
-                newNoteGO.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + (selected.value * 2) - 1), Ypos, Z1);
+                else
+                {
+                    nbFourth += newNote.nbFourth;
+                }
             }
-            Note newNote = new Note(newNoteGO, Note, pageShown, pages[pageShown].content.Count - 1, partition.Count - 1, (int)(selected.value * 4));
-            pages[pageShown].content.Add(newNote);
-            nbFourth += newNote.nbFourth;
-            pages[pageShown].nbFourth = nbFourth;
-            partition.Add(newNote);
         }   
     }
 
@@ -120,47 +159,42 @@ public class TimeLineScript : MonoBehaviour {
     {
         if (selected)
         {
-            showPage(pages.Count - 1);
+            // show the last page (here by giving the partition length, we know it would be over the number of pages)
+            if(indexToInsert==-1)
+                showPage(partition.Count);
 
             GameObject newNoteGO = Instantiate(NoteTimeLineRef, transform, false);
             newNoteGO.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + (selected.value * 2) - 1), Ypos, Z1);
             newNoteGO.transform.localScale = new Vector3(newNoteGO.transform.localScale.x * (selected.value * 4), newNoteGO.transform.localScale.y, newNoteGO.transform.localScale.z);
             newNoteGO.GetComponentInChildren<TextMesh>().text = "";
-
-            if (nbFourth + selected.value * 4 > nbFourthMax)
+           
+            Note newNote = new Note(newNoteGO, null, pageShown, partition.Count - 1, (int)(selected.value * 4));
+            if (indexToInsert > -1)
+                AddAt(newNote, indexToInsert);
+            else
             {
-                foreach (Note note in pages[pages.Count - 1].content)
+                partition.Add(newNote);
+                if (nbFourth + selected.value * 4 > nbFourthMax)
                 {
-                    note.NoteTimeLine.SetActive(false);
+                    newNote.NoteTimeLine.SetActive(false);
+                    showPage(pageShown + 1);
                 }
-                // add new page
-                pages.Add(new Page());
-                nbFourth = 0;
-                pageToShow++;
-                pageShown++;
-                newNoteGO.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + (selected.value * 2) - 1), Ypos, Z1);
+                else
+                {
+                    nbFourth += newNote.nbFourth;
+                }
             }
-            Note newNote = new Note(newNoteGO, null, pageShown, pages[pageShown].content.Count - 1, partition.Count - 1, (int)(selected.value * 4));
-            pages[pages.Count - 1].content.Add(newNote);
-            nbFourth += (int)(selected.value * 4);
-            pages[pages.Count - 1].nbFourth = nbFourth;
-            partition.Add(newNote);
         }
     }
 
-    public void AddAt(int page, float x, Note note)
+    public void AddAt(Note note, int indexInPartition)
     {
-        int size = (int)(note.NoteTimeLine.transform.localScale.x / (0.002f));
-        showPage(page);
-        pages[page].nbFourth += size;
-        int index = 0;
-        while(pages[page].content[index].NoteTimeLine.transform.localPosition.x < x)
-        {
-            index++;
-        }
-        pages[page].content.Insert(index, note);
-        partition.Insert(note.indexInPartition, note);
-        // à finir
+        partition.Insert(indexInPartition, note);
+
+        // refresh the page
+        showPage(pageShown + 1);
+        if (pageShown > 0)
+            showPage(pageShown - 1);
     }
 
     public void Play()
@@ -193,47 +227,16 @@ public class TimeLineScript : MonoBehaviour {
         }
     }
 
-    public void remove (NoteTimeLineScript toRemove, bool destroy)
+    public void remove (NoteTimeLineScript toRemove)
     {
-        Note noteToRemove = partition[toRemove.partitionIndex];
-        int size = noteToRemove.nbFourth;
-        float tRx = spaceX * size;
         partition.RemoveAt(toRemove.partitionIndex);
-        pages[pageShown].content.Remove(noteToRemove);
-        foreach (Note note in pages[pageShown].content)
-        {
-            if (note.NoteTimeLine.transform.localPosition.x > toRemove.transform.localPosition.x)
-                note.NoteTimeLine.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x - tRx, note.NoteTimeLine.transform.localPosition.y, note.NoteTimeLine.transform.localPosition.z);
-        }
-        pages[pageShown].nbFourth -= size;
-        nbFourth -= size;
-        if (pageShown < pages.Count - 1)
-        {
-            while(pages[pageShown+1].content[0].NoteTimeLine.transform.localScale.x / (0.002f) <= nbFourthMax - nbFourth )
-            {
-                int sizeNext = (int)(pages[pageShown + 1].content[0].NoteTimeLine.transform.localScale.x / (0.002f));
-                AddAt(pageShown, spaceX * (nbFourth + (sizeNext * 2) - 1), pages[pageShown + 1].content[0]);
-                pages[pageShown].content.Add(pages[pageShown + 1].content[0]);
-                pages[pageShown].nbFourth += sizeNext;
-                showPage(pageShown + 1);
-                remove(pages[pageShown].content[0].NoteTimeLine.GetComponent<NoteTimeLineScript>(), false);
-                showPage(pageShown - 1);
-            }
-        }
-        if(destroy)
-            Destroy(toRemove.transform.gameObject);
-    }
-}
+        Destroy(toRemove.transform.gameObject);
 
-public class Page
-{
-    public List<Note> content;
-    public int nbFourth;
-
-    public Page()
-    {
-        content = new List<Note>();
-        nbFourth = 0;
+        // refresh the page
+        int temp = pageShown;
+        showPage(pageShown + 1);
+        if (pageShown > 0 && pageShown > temp)
+            showPage(pageShown--);
     }
 }
 
@@ -242,17 +245,21 @@ public class Note
     public GameObject NoteTimeLine;
     public NoteScript NoteToPlay;
     public int page;
-    public int indexInPage;
-    public int indexInPartition;
+    private int indexInPartition;
     public int nbFourth;
 
-    public Note(GameObject _NoteTimeLine, NoteScript _NoteToPlay, int _page, int _indexInPage, int _indexInPartition, int _nbFourth)
+    public Note(GameObject _NoteTimeLine, NoteScript _NoteToPlay, int _page, int _indexInPartition, int _nbFourth)
     {
         NoteTimeLine = _NoteTimeLine;
         NoteToPlay = _NoteToPlay;
         page = _page;
-        indexInPage = _indexInPage;
-        indexInPartition = _indexInPartition;
+        setIndexInPartition(_indexInPartition);
         nbFourth = _nbFourth;
+    }
+
+    public void setIndexInPartition(int index)
+    {
+        indexInPartition = index;
+        NoteTimeLine.GetComponent<NoteTimeLineScript>().partitionIndex = index;
     }
 }
