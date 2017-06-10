@@ -15,7 +15,7 @@ public class TimeLineScript : MonoBehaviour {
     public LengthBtnScript selected;
     public int pageToShow;
 
-    private int nbFourth;
+    public int nbFourth;
     private float Z1;
     private float Z2;
 
@@ -57,6 +57,41 @@ public class TimeLineScript : MonoBehaviour {
             showPage(pageToShow);
         else
             pageToShow = pageShown;
+    }
+
+    private void Refresh()
+    {
+        int index = 0;
+        foreach (Note note in partition)
+        {
+            note.setIndexInPartition(index);
+            index++;
+            if (note.NoteTimeLine.activeSelf)
+                note.NoteTimeLine.SetActive(false);
+        }
+        index = 0;
+        for (int page = 0; page <= pageShown; page++)
+        {
+            nbFourth = 0;
+            Note note = partition[index];
+            while (nbFourth + note.nbFourth < nbFourthMax)
+            {
+                if (page == pageShown)
+                {
+                    note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
+                    note.NoteTimeLine.SetActive(true);
+                }
+                note.page = page;
+                nbFourth += note.nbFourth;
+                index++;
+                if (index < partition.Count)
+                    note = partition[index];
+                else
+                    break;
+            }
+            if (index >= partition.Count)
+                break;
+        }
     }
 
     private void showPage(int pToShow)
@@ -136,7 +171,7 @@ public class TimeLineScript : MonoBehaviour {
                 newNoteGO.GetComponentInChildren<TextMesh>().text = "" + Octave;
             newNoteGO.GetComponent<Renderer>().material = noteS.idleMaterial;
 
-            Note newNote = new Note(newNoteGO, noteS, pageShown, partition.Count - 1, (int)(selected.value * 4));
+            Note newNote = new Note(newNoteGO, noteS, pageShown, partition.Count, (int)(selected.value * 4));
             if (indexToInsert > -1)
                 AddAt(newNote, indexToInsert);
             else
@@ -190,11 +225,9 @@ public class TimeLineScript : MonoBehaviour {
     public void AddAt(Note note, int indexInPartition)
     {
         partition.Insert(indexInPartition, note);
-
+        indexToInsert = -1;
         // refresh the page
-        showPage(pageShown + 1);
-        if (pageShown > 0)
-            showPage(pageShown - 1);
+        Refresh();
     }
 
     public void Play()
@@ -233,10 +266,7 @@ public class TimeLineScript : MonoBehaviour {
         Destroy(toRemove.transform.gameObject);
 
         // refresh the page
-        int temp = pageShown;
-        showPage(pageShown + 1);
-        if (pageShown > 0 && pageShown > temp)
-            showPage(pageShown--);
+        Refresh();
     }
 }
 

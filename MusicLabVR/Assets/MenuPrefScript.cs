@@ -30,7 +30,14 @@ public class MenuPrefScript : MonoBehaviour {
             TLS.remove(target);
         if (transform.name.Equals("InsertLeftbutton"))
             TLS.indexToInsert = target.partitionIndex;
-        if (transform.name.Equals("InsertLeftbutton"))
+        if (transform.name.Equals("InsertRightbutton"))
             TLS.indexToInsert = target.partitionIndex + 1;
+        closeMenu();
+    }
+
+    public void closeMenu()
+    {
+        target.hasMenuOpened = false;
+        Destroy(transform.parent.gameObject);
     }
 }
