@@ -149,6 +149,8 @@ public class SteamVR_LaserPointer : MonoBehaviour
             MusicBtnScript MB = hit.transform.GetComponent<MusicBtnScript>();
             NoteTimeLineScript NTL = hit.transform.GetComponent<NoteTimeLineScript>();
             MenuPrefScript MP = hit.transform.GetComponent<MenuPrefScript>();
+			LevelSelectScript LS = hit.transform.GetComponent<LevelSelectScript>();
+
             if (NS)
                 NS.Play();
             if (LB)
@@ -157,8 +159,8 @@ public class SteamVR_LaserPointer : MonoBehaviour
                 MB.DoAction();
             if (NTL)
                 NTL.openMenu();
-            if (MP)
-                MP.doAct();
+			if (LS)
+				LS.EnterLevel ();
             pointer.transform.localScale = new Vector3(thickness * 5f, thickness * 5f, dist);
         }
         else
