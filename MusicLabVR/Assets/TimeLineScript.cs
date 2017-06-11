@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.IO;
 
 public class TimeLineScript : MonoBehaviour {
 
@@ -259,6 +261,30 @@ public class TimeLineScript : MonoBehaviour {
             StartCoroutine(playMusic());
         }
     }
+
+	public void Save()
+	{
+
+		JsonTestClass.MusicalFile musicFile = new JsonTestClass.MusicalFile();
+		int nbNote = partition.Count;
+
+		JsonTestClass.MusicalNote [] musicNote = new JsonTestClass.MusicalNote[nbNote];
+
+		for (int i = 0; i < musicNote.Length; i++) {
+			if (partition [i].NoteToPlay) {
+				musicNote [i] = new JsonTestClass.MusicalNote (partition [i].NoteToPlay.getNoteName (), partition [i].NoteToPlay.Octave, partition [i].nbFourth * 0.25f);
+			} else {
+				musicNote [i] = new JsonTestClass.MusicalNote (0, 10, partition [i].nbFourth * 0.25f);
+			}
+		}
+
+		String ressourcePath = Path.Combine (Application.dataPath, "Resources"); // Get Path to game resources folder
+
+		String filePath =  Path.Combine("StreamingAssets", "Composition.json"); // Get Path to file in resources folder
+		String realPath = Path.Combine(ressourcePath,filePath); // Get Real Path
+
+		JsonTestClass.SaveJSONToFile(JsonTestClass.MapToJSON (musicFile), realPath);
+	}
 
     public void remove (NoteTimeLineScript toRemove)
     {

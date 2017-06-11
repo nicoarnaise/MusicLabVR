@@ -27,10 +27,14 @@ public class MusicBtnScript : MonoBehaviour {
     {
 		timeLineScript = transform.parent.parent.GetComponentInChildren<TimeLineScript> ();
 
-        if (gameObject.name.Equals("playSample"))
-            foreach (MusicFileScript mf in MFS){
-                mf.Play();
-            }
+		if (gameObject.name.Equals ("playSample")) {
+			if (MFS.Length == 0) {
+				timeLineScript.Save ();
+			}
+			foreach (MusicFileScript mf in MFS) {
+				mf.Play ();
+			}
+		}
         if (gameObject.name.Equals("stop"))
         {
             foreach (MusicFileScript mf in MFS)

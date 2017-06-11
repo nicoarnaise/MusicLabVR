@@ -8,7 +8,7 @@ public class NoteScript : MonoBehaviour {
     public Material playMaterial;
     public bool play = false;
 
-    private int Octave;
+    public int Octave;
     private TimeLineScript TimeLine;
     private AudioSource audioS;
     private Renderer rend;
@@ -65,4 +65,135 @@ public class NoteScript : MonoBehaviour {
         if(refresh == 0)
             audioS.Stop();
     }
+
+	public int getNoteName(){
+		
+		if (transform.name.Contains ("do")) {
+			if (transform.name.EndsWith ("d")) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+
+		if (transform.name.Contains ("re")) {
+			if (transform.name.EndsWith ("d")) {
+				return 3;
+			} else {
+				if (transform.name.EndsWith ("b")) {
+					return 1;
+				} else {
+					return 2;
+				}	
+			}
+		}
+
+		if (transform.name.Contains ("mi")) {
+			if (transform.name.EndsWith ("d")) {
+				return 5;
+			} else {
+				if (transform.name.EndsWith ("b")) {
+					return 3;
+				} else {
+					return 4;
+				}	
+			}
+		}
+
+		if (transform.name.Contains ("fa")) {
+			if (transform.name.EndsWith ("d")) {
+				return 6;
+			} else {
+				if (transform.name.EndsWith ("b")) {
+					return 4;
+				} else {
+					return 5;
+				}	
+			}
+		}
+
+		if (transform.name.Contains ("sol")) {
+			if (transform.name.EndsWith ("d")) {
+				return 8;
+			} else {
+				if (transform.name.EndsWith ("b")) {
+					return 6;
+				} else {
+					return 7;
+				}	
+			}
+		}
+
+		if (transform.name.Contains ("la")) {
+			if (transform.name.EndsWith ("d")) {
+				return 10;
+			} else {
+				if (transform.name.EndsWith ("b")) {
+					return 8;
+				} else {
+					return 9;
+				}	
+			}
+		}
+
+		if (transform.name.Contains ("si")) {
+			if (transform.name.EndsWith ("b")) {
+				return 10;
+			} else {
+				return 11;
+			}
+		}
+
+		return 100;
+	}
+		/*switch (transform.name)
+		{
+		case "do"+Octave:
+			return 0;
+			break;
+		case "do"+Octave+"d":
+		case "re"+Octave+"b":
+			return 1;
+			break;
+		case "re"+Octave:
+			return 2;
+			break;
+		case "re"+Octave+"d":
+		case "mi"+Octave+"b":
+			return 3;
+			break;
+		case "mi"+Octave:
+		case "fa"+Octave+"b":
+			return 4;
+			break;
+		case "mi"+Octave+"d":
+		case "fa"+Octave:
+			return 5;
+			break;
+		case "fa"+Octave+"d":
+		case "sol"+Octave+"b":
+			return 6;
+			break;
+		case "sol"+Octave:
+			return 7;
+			break;
+		case "sol"+Octave+"d":
+		case "la"+Octave+"b":
+			return 8;
+			break;
+		case "la"+Octave:
+			return 9;
+			break;
+		case "la"+Octave+"d":
+		case "si"+Octave+"b":
+			return 10;
+			break;
+		case "si"+Octave:
+			return 11;
+			break;
+		default:
+			return -1;
+			break;
+		}
+	}*/
 }
