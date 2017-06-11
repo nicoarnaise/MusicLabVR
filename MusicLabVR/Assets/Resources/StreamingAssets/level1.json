@@ -1,9 +1,13 @@
 {"musicalNote":
-	[ {"noteName":2,"noteOctave":3,"noteTempo":1},
-	{"noteName":2,"noteOctave":4,"noteTempo":1},
-	{"noteName":2,"noteOctave":5,"noteTempo":1},
-	{"noteName":9,"noteOctave":4,"noteTempo":1},
-	{"noteName":9,"noteOctave":3,"noteTempo":1},
-	{"noteName":9,"noteOctave":2,"noteTempo":1},
-	{"noteName":2,"noteOctave":2,"noteTempo":2}],
-"numberNote":7}
+	[ {"noteName":0,"noteOctave":3,"noteTempo":0.5},
+	{"noteName":0,"noteOctave":3,"noteTempo":0.5},
+	{"noteName":0,"noteOctave":3,"noteTempo":0.5},
+	{"noteName":2,"noteOctave":3,"noteTempo":0.5},
+	{"noteName":4,"noteOctave":3,"noteTempo":1},
+	{"noteName":2,"noteOctave":3,"noteTempo":1},
+	{"noteName":0,"noteOctave":3,"noteTempo":0.5},
+	{"noteName":4,"noteOctave":3,"noteTempo":0.5},
+	{"noteName":2,"noteOctave":3,"noteTempo":0.5},
+	{"noteName":2,"noteOctave":3,"noteTempo":0.5},
+	{"noteName":0,"noteOctave":3,"noteTempo":1}],
+"numberNote":11}
