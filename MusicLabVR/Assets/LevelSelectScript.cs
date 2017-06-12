@@ -7,12 +7,15 @@ public class LevelSelectScript : MonoBehaviour {
 
 	public int level;
 	public float succeedRate = 80f;
-	public GameObject gameState;
+
+	private GameObject gameState;
+	private GameState gs;
 
 		public void EnterLevel (){
 		if (level == 10) {
 			Quit ();
 		} else {
+			gs.neededPercentage = succeedRate;
 			SceneManager.LoadScene (level);
 		}
 		}
@@ -29,8 +32,8 @@ public class LevelSelectScript : MonoBehaviour {
 
 		public void Awake(){
 			gameState = GameObject.Find("GameState");
-			GameState gs = gameState.GetComponent<GameState>();
-		if (gs.levelSucceed[level] >= succeedRate ){
+			gs = gameState.GetComponent<GameState>();
+		if (gs.levelPercentage[level] >= succeedRate ){
 			this.gameObject.GetComponent<MeshRenderer> ().material.color = Color.green;
 			this.gameObject.GetComponent<Image> ().color = Color.green;
 			}

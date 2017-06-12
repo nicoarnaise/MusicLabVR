@@ -46,8 +46,10 @@ public class MusicBtnScript : MonoBehaviour {
         if (gameObject.name.Equals("rest"))
 			timeLineScript.AddRest();
 		if (gameObject.name.Equals ("play")) {
+			GameObject gameState = GameObject.Find("GameState");
+			GameState gs = gameState.GetComponent<GameState>();
 			timeLineScript.Play ();
-			if (MFS [0].partitionMatch (timeLineScript.partition)) {
+			if (MFS [0].MatchingPercentage (MFS [0].MatchingLine(timeLineScript.partition)) >=  gs.neededPercentage){
 				Instantiate (prefabWin, transform.parent.parent.parent, true);
 				Debug.Log ("Level Complete !");
 			} else {
