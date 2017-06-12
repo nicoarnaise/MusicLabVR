@@ -138,37 +138,41 @@ public class SteamVR_LaserPointer : MonoBehaviour
         }
 
         // user can play notes by keeping trigger pressed if they have nothing selected for note duration.
+
         NoteScript NS = hit.transform.GetComponent<NoteScript>();
-        if (NS && !NS.transform.parent.parent.GetComponent<OctaveScript>().TimeLine.GetComponent<TimeLineScript>().selected)
-            triggerPressedBefore = false;
+		if (hit.transform) {
 
-        if (controller != null && controller.triggerPressed && !triggerPressedBefore)
-        {
-            triggerPressedBefore = true;
-            LengthBtnScript LB = hit.transform.GetComponent<LengthBtnScript>();
-            MusicBtnScript MB = hit.transform.GetComponent<MusicBtnScript>();
-            NoteTimeLineScript NTL = hit.transform.GetComponent<NoteTimeLineScript>();
-            MenuPrefScript MP = hit.transform.GetComponent<MenuPrefScript>();
-			LevelSelectScript LS = hit.transform.GetComponent<LevelSelectScript>();
+			if (NS && !NS.transform.parent.parent.GetComponent<OctaveScript> ().TimeLine.GetComponent<TimeLineScript> ().selected)
+				triggerPressedBefore = false;
 
-            if (NS)
-                NS.Play();
-            if (LB)
-                LB.Select();
-            if(MB)
-                MB.DoAction();
-            if (NTL)
-                NTL.openMenu();
-			if (LS)
-				LS.EnterLevel ();
-            pointer.transform.localScale = new Vector3(thickness * 5f, thickness * 5f, dist);
-        }
-        else
-        {
-            if(controller != null && !controller.triggerPressed)
-                triggerPressedBefore = false;
-            pointer.transform.localScale = new Vector3(thickness, thickness, dist);
-        }
+			if (controller != null && controller.triggerPressed && !triggerPressedBefore) {
+				triggerPressedBefore = true;
+				LengthBtnScript LB = hit.transform.GetComponent<LengthBtnScript> ();
+				MusicBtnScript MB = hit.transform.GetComponent<MusicBtnScript> ();
+				NoteTimeLineScript NTL = hit.transform.GetComponent<NoteTimeLineScript> ();
+				MenuPrefScript MP = hit.transform.GetComponent<MenuPrefScript> ();
+				LevelSelectScript LS = hit.transform.GetComponent<LevelSelectScript> ();
+
+				if (NS)
+					NS.Play ();
+				if (LB)
+					LB.Select ();
+				if (MB)
+					MB.DoAction ();
+				if (NTL)
+					NTL.openMenu ();
+				if (MP)
+					MP.doAct ();
+				if (LS)
+					LS.EnterLevel ();
+				pointer.transform.localScale = new Vector3 (thickness * 5f, thickness * 5f, dist);
+			} else {
+				if (controller != null && !controller.triggerPressed)
+					triggerPressedBefore = false;
+			}
+		}
+		if (!(controller != null && controller.triggerPressed && !triggerPressedBefore))
+			pointer.transform.localScale = new Vector3 (thickness, thickness, dist);
 
         SteamVR_Controller.Device device = SteamVR_Controller.Input((int)controller.controllerIndex);
         //If finger is on touchpad

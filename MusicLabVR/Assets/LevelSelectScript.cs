@@ -12,7 +12,7 @@ public class LevelSelectScript : MonoBehaviour {
 	private GameState gs;
 
 		public void EnterLevel (){
-		if (level == 10) {
+		if (level == 0) {
 			Quit ();
 		} else {
 			gs.neededPercentage = succeedRate;

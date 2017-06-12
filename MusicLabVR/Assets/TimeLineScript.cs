@@ -71,29 +71,30 @@ public class TimeLineScript : MonoBehaviour {
             if (note.NoteTimeLine.activeSelf)
                 note.NoteTimeLine.SetActive(false);
         }
-        index = 0;
-        for (int page = 0; page <= pageShown; page++)
-        {
-            nbFourth = 0;
-            Note note = partition[index];
-            while (nbFourth + note.nbFourth < nbFourthMax)
-            {
-                if (page == pageShown)
-                {
-                    note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
-                    note.NoteTimeLine.SetActive(true);
-                }
-                note.page = page;
-                nbFourth += note.nbFourth;
-                index++;
-                if (index < partition.Count)
-                    note = partition[index];
-                else
-                    break;
-            }
-            if (index >= partition.Count)
-                break;
-        }
+		if (partition.Count > 0) {
+			index = 0;
+			for (int page = 0; page <= pageShown; page++) {
+				nbFourth = 0;
+				Note note = partition [index];
+				while (nbFourth + note.nbFourth < nbFourthMax) {
+					if (page == pageShown) {
+						note.NoteTimeLine.transform.localPosition = new Vector3 (startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
+						note.NoteTimeLine.SetActive (true);
+					}
+					note.page = page;
+					nbFourth += note.nbFourth;
+					index++;
+					if (index < partition.Count)
+						note = partition [index];
+					else
+						break;
+				}
+				if (index >= partition.Count)
+					break;
+			}
+		} else {
+			nbFourth = 0;
+		}
     }
 
     private void showPage(int pToShow)

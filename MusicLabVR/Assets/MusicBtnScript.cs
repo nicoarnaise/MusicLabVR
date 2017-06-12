@@ -30,9 +30,10 @@ public class MusicBtnScript : MonoBehaviour {
 		if (gameObject.name.Equals ("playSample")) {
 			if (MFS.Length == 0) {
 				timeLineScript.Save ();
-			}
-			foreach (MusicFileScript mf in MFS) {
-				mf.Play ();
+			} else {
+				foreach (MusicFileScript mf in MFS) {
+					mf.Play ();
+				}
 			}
 		}
         if (gameObject.name.Equals("stop"))
@@ -49,11 +50,13 @@ public class MusicBtnScript : MonoBehaviour {
 			GameObject gameState = GameObject.Find("GameState");
 			GameState gs = gameState.GetComponent<GameState>();
 			timeLineScript.Play ();
-			if (MFS [0].MatchingPercentage (MFS [0].MatchingLine(timeLineScript.partition)) >=  gs.neededPercentage){
-				Instantiate (prefabWin, transform.parent.parent.parent, true);
-				Debug.Log ("Level Complete !");
-			} else {
-				Debug.Log ("Your composition does not match yet");
+			if (MFS.Length != 0) {
+				if (MFS [0].MatchingPercentage (MFS [0].MatchingLine (timeLineScript.partition)) >= gs.neededPercentage) {
+					Instantiate (prefabWin, transform.parent.parent.parent, true);
+					Debug.Log ("Level Complete !");
+				} else {
+					Debug.Log ("Your composition does not match yet");
+				}
 			}
 		}
 		if (gameObject.name.Equals ("WinObject")) {
