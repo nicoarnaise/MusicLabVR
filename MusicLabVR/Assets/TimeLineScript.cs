@@ -267,17 +267,19 @@ public class TimeLineScript : MonoBehaviour {
 	{
 
 		JsonTestClass.MusicalFile musicFile = new JsonTestClass.MusicalFile();
-		int nbNote = partition.Count;
+		musicFile.numberNote = partition.Count;
+		musicFile.musicalNote = new JsonTestClass.MusicalNote[partition.Count];
 
-		JsonTestClass.MusicalNote [] musicNote = new JsonTestClass.MusicalNote[nbNote];
 
-		for (int i = 0; i < musicNote.Length; i++) {
+		for (int i = 0; i < partition.Count; i++) {
 			if (partition [i].NoteToPlay) {
-				musicNote [i] = new JsonTestClass.MusicalNote (partition [i].NoteToPlay.getNoteName (), partition [i].NoteToPlay.Octave, partition [i].nbFourth * 0.25f);
+				musicFile.musicalNote[i] = new JsonTestClass.MusicalNote (partition [i].NoteToPlay.getNoteName (), partition [i].NoteToPlay.Octave, partition [i].nbFourth * 0.25f);
 			} else {
-				musicNote [i] = new JsonTestClass.MusicalNote (0, 10, partition [i].nbFourth * 0.25f);
+				musicFile.musicalNote[i] = new JsonTestClass.MusicalNote (0, 10, partition [i].nbFourth * 0.25f);
 			}
 		}
+
+
 
 		String ressourcePath = Path.Combine (Application.dataPath, "Resources"); // Get Path to game resources folder
 
