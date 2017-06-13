@@ -271,18 +271,7 @@ public class TimeLineScript : MonoBehaviour {
             StartCoroutine(playMusic());
         }
     }
-
-	public int DirCount(DirectoryInfo d)
-	{
-		int result = 0;
-		// Add file sizes.
-		FileInfo[] fis = d.GetFiles();
-		foreach (FileInfo fi in fis)
-		{
-			result++;
-		}
-		return result;
-	}
+		
 
 	public void Save()
 	{
@@ -305,7 +294,7 @@ public class TimeLineScript : MonoBehaviour {
 		String ressourcePath = Path.Combine (Application.dataPath, "Resources"); // Get Path to game resources folder
 		DirectoryInfo di = new DirectoryInfo(Path.Combine(ressourcePath,"StreamingAssets")); // Get Path to Streaming assets
 
-		int numberFiles = DirCount (di)/2;
+		int numberFiles = CreateFiles.DirCount (di)/2;
 
 		String filePath =  Path.Combine("StreamingAssets", "Comp"+numberFiles+".json"); // Get Path to file in resources folder
 		String realPath = Path.Combine(ressourcePath,filePath); // Get Real Path
