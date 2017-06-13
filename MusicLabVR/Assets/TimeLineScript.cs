@@ -10,8 +10,11 @@ public class TimeLineScript : MonoBehaviour {
     public int nbFourthMax = 48;
     public float spaceX = 0.2f;
     public float startX = -4.8f;
-    public int nbLine = 2;
     public float Ypos = 0.003f;
+
+    public Material True;
+    public Material False;
+    public Material Error;
 
     public bool doAct = false;
     public LengthBtnScript selected;
@@ -20,6 +23,7 @@ public class TimeLineScript : MonoBehaviour {
     public int nbFourth;
     private float Z1;
     private float Z2;
+    private int nbLine = 2;
 
     private float startTime;
     private float currentTime;
@@ -95,6 +99,11 @@ public class TimeLineScript : MonoBehaviour {
 		} else {
 			nbFourth = 0;
 		}
+    }
+
+    public void setCorrection(Note note, int v)
+    {
+        foreach(GameObject noteTL in transform.ch)
     }
 
     private void showPage(int pToShow)
