@@ -22,7 +22,11 @@ public class MusicFileScript : MonoBehaviour {
     private float startTime;
 
 	void Start () {
-		
+
+		GameObject gameState = GameObject.Find("GameState");
+		GameState gs = gameState.GetComponent<GameState>();
+		fileName = gs.fileName;
+
 		String newPath = Path.Combine("StreamingAssets", fileName); // Get Path to file in resources folder without .json !
 		String savedString = JsonTestClass.LoadJSONFromFile(newPath); // Load Json from file
 

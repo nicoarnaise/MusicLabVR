@@ -7,6 +7,7 @@ public class LevelSelectScript : MonoBehaviour {
 
 	public int level;
 	public float succeedRate = 80f;
+	public string fileName;
 
 	private GameObject gameState;
 	private GameState gs;
@@ -16,7 +17,12 @@ public class LevelSelectScript : MonoBehaviour {
 			Quit ();
 		} else {
 			gs.neededPercentage = succeedRate;
-			SceneManager.LoadScene (level);
+			gs.fileName = fileName;
+			if (fileName == "level1") {
+				SceneManager.LoadScene ("level1");
+			} else {
+				SceneManager.LoadScene ("level2");
+			}
 		}
 		}
 

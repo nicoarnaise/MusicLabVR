@@ -15,6 +15,7 @@ public class GameState : MonoBehaviour {
 	// Variables globales du jeu.
 	public float[] levelPercentage;
 	public float neededPercentage;
+	public String fileName;
 
 	void Awake() {
 		// Utilisation du design Pattern Singleton, si c'est la première fois que ce script est appele, il est cree, 

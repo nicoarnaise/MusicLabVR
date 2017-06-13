@@ -37,6 +37,7 @@ public class CreateFiles : MonoBehaviour {
 			String fileName = fis [2*i].Name;
 			String realName = fileName.Substring (0, (fileName.Length - 5));
 			newObj.GetComponent<MusicFileScript> ().fileName = realName;
+			newObj.GetComponent<LevelSelectScript> ().fileName = realName;
 			newObj.transform.GetChild (0).GetComponent<TextMesh> ().text = realName;
 		}
 	}
