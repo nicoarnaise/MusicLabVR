@@ -121,7 +121,7 @@ public class MusicFileScript : MonoBehaviour {
 		int nbNote = Mathf.Min (toCompare.Count, partition.Count);
 		List<int> result = new List<int> ();
 		for (int i = 0; i < nbNote; i++) {
-			result.Add (CompareNote (partition [i], new KeyValuePair<NoteScript, float> (toCompare [i].NoteToPlay, toCompare [i].nbFourth / 4)));
+			result.Add (CompareNote (partition [i], new KeyValuePair<NoteScript, float> (toCompare [i].NoteToPlay, (float)(toCompare [i].nbFourth) / 4)));
 		}
 		int nbMaxNote = Mathf.Max (toCompare.Count, partition.Count);
 		for (int i = nbNote; i < nbMaxNote; i++) {

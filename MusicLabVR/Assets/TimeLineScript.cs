@@ -330,7 +330,7 @@ public class TimeLineScript : MonoBehaviour {
 
 		for (int i = 0; i < partition.Count; i++) {
 			if (partition [i].NoteToPlay) {
-				musicFile.musicalNote[i] = new JsonTestClass.MusicalNote (partition [i].NoteToPlay.getNoteName (), partition [i].NoteToPlay.Octave, partition [i].nbFourth * 0.25f);
+				musicFile.musicalNote[i] = new JsonTestClass.MusicalNote (partition [i].NoteToPlay.getNoteName (), partition [i].NoteToPlay.Octave - 1, partition [i].nbFourth * 0.25f);
 			} else {
 				musicFile.musicalNote[i] = new JsonTestClass.MusicalNote (0, 10, partition [i].nbFourth * 0.25f);
 			}

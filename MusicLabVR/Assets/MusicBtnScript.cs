@@ -26,7 +26,8 @@ public class MusicBtnScript : MonoBehaviour {
 
     public void DoAction()
     {
-		timeLineScript = transform.parent.parent.GetComponentInChildren<TimeLineScript> ();
+		if(transform.parent.parent)
+			timeLineScript = transform.parent.parent.GetComponentInChildren<TimeLineScript> ();
 
 		if (gameObject.name.Equals ("playSample")) {
 			if (MFS.Length == 0) {
@@ -57,7 +58,7 @@ public class MusicBtnScript : MonoBehaviour {
                 int maxPartition = timeLineScript.partition.Count;
                 for(int index = 0; index < maxPartition; index ++)
                 {
-                  //  timeLineScript.setCorrection(timeLineScript.partition[index], results[index]);
+                    timeLineScript.setCorrection(timeLineScript.partition[index], results[index]);
                 }
 				if (MFS [0].MatchingPercentage (MFS [0].MatchingLine (timeLineScript.partition)) >= gs.neededPercentage) {
 					Instantiate (prefabWin, transform.parent.parent.parent, true);
@@ -68,7 +69,7 @@ public class MusicBtnScript : MonoBehaviour {
 			}
 		}
 
-        if (gameObject.name.Equals ("WinObject")) {
+        if (gameObject.name.Contains ("WinObject")) {
             SceneManager.LoadScene(0);
 		}
 			
