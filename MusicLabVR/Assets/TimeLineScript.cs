@@ -303,12 +303,11 @@ public class TimeLineScript : MonoBehaviour {
 
 
 		String ressourcePath = Path.Combine (Application.dataPath, "Resources"); // Get Path to game resources folder
-
 		DirectoryInfo di = new DirectoryInfo(Path.Combine(ressourcePath,"StreamingAssets")); // Get Path to Streaming assets
 
-		int numberFiles = DirCount (di);
+		int numberFiles = DirCount (di)/2;
 
-		String filePath =  Path.Combine("StreamingAssets", "Comp"+di+".json"); // Get Path to file in resources folder
+		String filePath =  Path.Combine("StreamingAssets", "Comp"+numberFiles+".json"); // Get Path to file in resources folder
 		String realPath = Path.Combine(ressourcePath,filePath); // Get Real Path
 
 		JsonTestClass.SaveJSONToFile(JsonTestClass.MapToJSON (musicFile), realPath);
