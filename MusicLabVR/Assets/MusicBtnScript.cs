@@ -57,11 +57,11 @@ public class MusicBtnScript : MonoBehaviour {
                 int maxPartition = timeLineScript.partition.Count;
                 for(int index = 0; index < maxPartition; index ++)
                 {
-                    timeLineScript.setCorrection(timeLineScript.partition[index], results[index]);
+                  //  timeLineScript.setCorrection(timeLineScript.partition[index], results[index]);
                 }
                 for(int index = maxPartition; index < results.Count; index++)
                 {
-                    timeLineScript.addCorrection();
+                    //timeLineScript.addCorrection();
                 }
 				if (MFS [0].MatchingPercentage (MFS [0].MatchingLine (timeLineScript.partition)) >= gs.neededPercentage) {
 					Instantiate (prefabWin, transform.parent.parent.parent, true);

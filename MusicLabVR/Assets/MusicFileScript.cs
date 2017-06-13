@@ -46,7 +46,7 @@ public class MusicFileScript : MonoBehaviour {
 
 		}
 
-        Play();
+      //  Play();
 	}
 
     public void Play()

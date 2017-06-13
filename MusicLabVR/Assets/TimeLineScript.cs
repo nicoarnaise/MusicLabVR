@@ -103,7 +103,7 @@ public class TimeLineScript : MonoBehaviour {
 
     public void setCorrection(Note note, int v)
     {
-        foreach(GameObject noteTL in transform.ch)
+    //    foreach(GameObject noteTL in transform.ch)
     }
 
     private void showPage(int pToShow)
@@ -272,6 +272,18 @@ public class TimeLineScript : MonoBehaviour {
         }
     }
 
+	public int DirCount(DirectoryInfo d)
+	{
+		int result = 0;
+		// Add file sizes.
+		FileInfo[] fis = d.GetFiles();
+		foreach (FileInfo fi in fis)
+		{
+			result++;
+		}
+		return result;
+	}
+
 	public void Save()
 	{
 
@@ -292,7 +304,11 @@ public class TimeLineScript : MonoBehaviour {
 
 		String ressourcePath = Path.Combine (Application.dataPath, "Resources"); // Get Path to game resources folder
 
-		String filePath =  Path.Combine("StreamingAssets", "Composition.json"); // Get Path to file in resources folder
+		DirectoryInfo di = new DirectoryInfo(Path.Combine(ressourcePath,"StreamingAssets")); // Get Path to Streaming assets
+
+		int numberFiles = DirCount (di);
+
+		String filePath =  Path.Combine("StreamingAssets", "Comp"+di+".json"); // Get Path to file in resources folder
 		String realPath = Path.Combine(ressourcePath,filePath); // Get Real Path
 
 		JsonTestClass.SaveJSONToFile(JsonTestClass.MapToJSON (musicFile), realPath);
