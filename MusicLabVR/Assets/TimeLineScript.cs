@@ -15,6 +15,7 @@ public class TimeLineScript : MonoBehaviour {
     public Material True;
     public Material False;
     public Material Error;
+    public Material NoRes;
 
     public bool doAct = false;
     public LengthBtnScript selected;
@@ -72,8 +73,13 @@ public class TimeLineScript : MonoBehaviour {
         {
             note.setIndexInPartition(index);
             index++;
+            note.corr.GetComponent<Renderer>().material = NoRes;
+            note.corr.GetComponentInChildren<TextMesh>().text = "";
             if (note.NoteTimeLine.activeSelf)
+            {
                 note.NoteTimeLine.SetActive(false);
+                note.corr.SetActive(false);
+            }
         }
 		if (partition.Count > 0) {
 			index = 0;
@@ -83,8 +89,10 @@ public class TimeLineScript : MonoBehaviour {
 				while (nbFourth + note.nbFourth < nbFourthMax) {
 					if (page == pageShown) {
 						note.NoteTimeLine.transform.localPosition = new Vector3 (startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
-						note.NoteTimeLine.SetActive (true);
-					}
+                        note.corr.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
+                        note.NoteTimeLine.SetActive(true);
+                        note.corr.SetActive(true);
+                    }
 					note.page = page;
 					nbFourth += note.nbFourth;
 					index++;
@@ -96,6 +104,10 @@ public class TimeLineScript : MonoBehaviour {
 				if (index >= partition.Count)
 					break;
 			}
+            if(nbFourth == 0)
+            {
+                showPage(pageShown - 1);
+            }
 		} else {
 			nbFourth = 0;
 		}
@@ -103,7 +115,19 @@ public class TimeLineScript : MonoBehaviour {
 
     public void setCorrection(Note note, int v)
     {
-    //    foreach(GameObject noteTL in transform.ch)
+        note.corr.GetComponentInChildren<TextMesh>().text = ""+v;
+        switch (v)
+        {
+            case 0:
+                note.corr.GetComponent<Renderer>().material = False;
+                break;
+            case 3:
+                note.corr.GetComponent<Renderer>().material = True;
+                break;
+            default:
+                note.corr.GetComponent<Renderer>().material = Error;
+                break;
+        }
     }
 
     private void showPage(int pToShow)
@@ -119,8 +143,11 @@ public class TimeLineScript : MonoBehaviour {
             {
                 note.setIndexInPartition(index);
                 index++;
-                if(note.NoteTimeLine.activeSelf)
+                if (note.NoteTimeLine.activeSelf)
+                {
                     note.NoteTimeLine.SetActive(false);
+                    note.corr.SetActive(false);
+                }
             }
 
             pageShown = pageToShow;
@@ -134,7 +161,9 @@ public class TimeLineScript : MonoBehaviour {
                     if (page == pageShown)
                     {
                         note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
+                        note.corr.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
                         note.NoteTimeLine.SetActive(true);
+                        note.corr.SetActive(true);
                     }
                     note.page = page;
                     nbFourth += note.nbFourth;
@@ -156,7 +185,9 @@ public class TimeLineScript : MonoBehaviour {
                     {
                         note = partition[index];
                         note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
+                        note.corr.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
                         note.NoteTimeLine.SetActive(true);
+                        note.corr.SetActive(true);
                         nbFourth += note.nbFourth;
                         index++;
                     }
@@ -184,6 +215,14 @@ public class TimeLineScript : MonoBehaviour {
             newNoteGO.GetComponent<Renderer>().material = noteS.idleMaterial;
 
             Note newNote = new Note(newNoteGO, noteS, pageShown, partition.Count, (int)(selected.value * 4));
+
+            GameObject corr = Instantiate(NoteTimeLineRef, transform.FindChild("resultsContainer"), false);
+            corr.transform.localPosition = new Vector3(newNote.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
+            corr.transform.localScale = newNote.NoteTimeLine.transform.localScale;
+            corr.GetComponent<Renderer>().material = NoRes;
+            corr.GetComponentInChildren<TextMesh>().text = "";
+            newNote.corr = corr;
+
             if (indexToInsert > -1)
                 AddAt(newNote, indexToInsert);
             else
@@ -216,6 +255,14 @@ public class TimeLineScript : MonoBehaviour {
             newNoteGO.GetComponentInChildren<TextMesh>().text = "";
            
             Note newNote = new Note(newNoteGO, null, pageShown, partition.Count - 1, (int)(selected.value * 4));
+
+            GameObject corr = Instantiate(NoteTimeLineRef, transform.FindChild("resultsContainer"), false);
+            corr.transform.localPosition = new Vector3(newNote.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
+            corr.transform.localScale = newNote.NoteTimeLine.transform.localScale;
+            corr.GetComponent<Renderer>().material = NoRes;
+            corr.GetComponentInChildren<TextMesh>().text = "";
+            newNote.corr = corr;
+
             if (indexToInsert > -1)
                 AddAt(newNote, indexToInsert);
             else
@@ -304,8 +351,10 @@ public class TimeLineScript : MonoBehaviour {
 
     public void remove (NoteTimeLineScript toRemove)
     {
+        Note toDestroy = partition[toRemove.partitionIndex];
         partition.RemoveAt(toRemove.partitionIndex);
-        Destroy(toRemove.transform.gameObject);
+        Destroy(toDestroy.NoteTimeLine);
+        Destroy(toDestroy.corr);
 
         // refresh the page
         Refresh();
@@ -319,6 +368,7 @@ public class Note
     public int page;
     private int indexInPartition;
     public int nbFourth;
+    public GameObject corr;
 
     public Note(GameObject _NoteTimeLine, NoteScript _NoteToPlay, int _page, int _indexInPartition, int _nbFourth)
     {

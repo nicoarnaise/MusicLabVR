@@ -59,10 +59,6 @@ public class MusicBtnScript : MonoBehaviour {
                 {
                   //  timeLineScript.setCorrection(timeLineScript.partition[index], results[index]);
                 }
-                for(int index = maxPartition; index < results.Count; index++)
-                {
-                    //timeLineScript.addCorrection();
-                }
 				if (MFS [0].MatchingPercentage (MFS [0].MatchingLine (timeLineScript.partition)) >= gs.neededPercentage) {
 					Instantiate (prefabWin, transform.parent.parent.parent, true);
 					Debug.Log ("Level Complete !");
