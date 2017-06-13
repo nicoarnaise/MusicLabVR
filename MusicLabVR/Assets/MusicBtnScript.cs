@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MusicBtnScript : MonoBehaviour {
 
@@ -46,11 +47,22 @@ public class MusicBtnScript : MonoBehaviour {
         }
         if (gameObject.name.Equals("rest"))
 			timeLineScript.AddRest();
+
 		if (gameObject.name.Equals ("play")) {
 			GameObject gameState = GameObject.Find("GameState");
 			GameState gs = gameState.GetComponent<GameState>();
 			timeLineScript.Play ();
 			if (MFS.Length != 0) {
+                List<int> results = MFS[0].MatchingLine(timeLineScript.partition);
+                int maxPartition = timeLineScript.partition.Count;
+                for(int index = 0; index < maxPartition; index ++)
+                {
+                    timeLineScript.setCorrection(timeLineScript.partition[index], results[index]);
+                }
+                for(int index = maxPartition; index < results.Count; index++)
+                {
+                    timeLineScript.addCorrection();
+                }
 				if (MFS [0].MatchingPercentage (MFS [0].MatchingLine (timeLineScript.partition)) >= gs.neededPercentage) {
 					Instantiate (prefabWin, transform.parent.parent.parent, true);
 					Debug.Log ("Level Complete !");
@@ -59,8 +71,9 @@ public class MusicBtnScript : MonoBehaviour {
 				}
 			}
 		}
-		if (gameObject.name.Equals ("WinObject")) {
-			//TODO
+
+        if (gameObject.name.Equals ("WinObject")) {
+            SceneManager.LoadScene(0);
 		}
 			
     }
