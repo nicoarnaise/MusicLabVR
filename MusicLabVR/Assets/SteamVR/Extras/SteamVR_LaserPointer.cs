@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using Valve.VR;
+using UnityEngine.SceneManagement;
 
 public struct PointerEventArgs
 {
@@ -188,6 +189,9 @@ public class SteamVR_LaserPointer : MonoBehaviour
 		}
 		if (!(controller != null && controller.triggerPressed && !triggerPressedBefore))
 			pointer.transform.localScale = new Vector3 (thickness, thickness, dist);
+
+        if (controller != null && controller.gripped)
+            SceneManager.LoadScene(0);
 
         SteamVR_Controller.Device device = SteamVR_Controller.Input((int)controller.controllerIndex);
         //If finger is on touchpad
