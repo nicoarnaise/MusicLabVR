@@ -78,7 +78,8 @@ public class TimeLineScript : MonoBehaviour {
             if (note.NoteTimeLine.activeSelf)
             {
                 note.NoteTimeLine.SetActive(false);
-                note.corr.SetActive(false);
+                if(note.corr)
+                    note.corr.SetActive(false);
             }
         }
 		if (partition.Count > 0) {
@@ -89,9 +90,12 @@ public class TimeLineScript : MonoBehaviour {
 				while (nbFourth + note.nbFourth < nbFourthMax) {
 					if (page == pageShown) {
 						note.NoteTimeLine.transform.localPosition = new Vector3 (startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
-                        note.corr.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
                         note.NoteTimeLine.SetActive(true);
-                        note.corr.SetActive(true);
+                        if (note.corr)
+                        {
+                            note.corr.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
+                            note.corr.SetActive(true);
+                        }
                     }
 					note.page = page;
 					nbFourth += note.nbFourth;
@@ -146,7 +150,8 @@ public class TimeLineScript : MonoBehaviour {
                 if (note.NoteTimeLine.activeSelf)
                 {
                     note.NoteTimeLine.SetActive(false);
-                    note.corr.SetActive(false);
+                    if(note.corr)
+                        note.corr.SetActive(false);
                 }
             }
 
@@ -161,9 +166,12 @@ public class TimeLineScript : MonoBehaviour {
                     if (page == pageShown)
                     {
                         note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
-                        note.corr.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
                         note.NoteTimeLine.SetActive(true);
-                        note.corr.SetActive(true);
+                        if (note.corr)
+                        {
+                            note.corr.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
+                            note.corr.SetActive(true);
+                        }
                     }
                     note.page = page;
                     nbFourth += note.nbFourth;
@@ -185,9 +193,12 @@ public class TimeLineScript : MonoBehaviour {
                     {
                         note = partition[index];
                         note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
-                        note.corr.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
                         note.NoteTimeLine.SetActive(true);
-                        note.corr.SetActive(true);
+                        if (note.corr)
+                        {
+                            note.corr.transform.localPosition = new Vector3(note.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
+                            note.corr.SetActive(true);
+                        }
                         nbFourth += note.nbFourth;
                         index++;
                     }
@@ -216,13 +227,15 @@ public class TimeLineScript : MonoBehaviour {
 
             Note newNote = new Note(newNoteGO, noteS, pageShown, partition.Count, (int)(selected.value * 4));
 
-            GameObject corr = Instantiate(NoteTimeLineRef, transform.FindChild("resultsContainer"), false);
-            corr.transform.localPosition = new Vector3(newNote.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
-            corr.transform.localScale = newNote.NoteTimeLine.transform.localScale;
-            corr.GetComponent<Renderer>().material = NoRes;
-            corr.GetComponentInChildren<TextMesh>().text = "";
-            newNote.corr = corr;
-
+            if (Error)
+            {
+                GameObject corr = Instantiate(NoteTimeLineRef, transform.FindChild("resultsContainer"), false);
+                corr.transform.localPosition = new Vector3(newNote.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
+                corr.transform.localScale = newNote.NoteTimeLine.transform.localScale;
+                corr.GetComponent<Renderer>().material = NoRes;
+                corr.GetComponentInChildren<TextMesh>().text = "";
+                newNote.corr = corr;
+            }
             if (indexToInsert > -1)
                 AddAt(newNote, indexToInsert);
             else
@@ -256,13 +269,15 @@ public class TimeLineScript : MonoBehaviour {
            
             Note newNote = new Note(newNoteGO, null, pageShown, partition.Count - 1, (int)(selected.value * 4));
 
-            GameObject corr = Instantiate(NoteTimeLineRef, transform.FindChild("resultsContainer"), false);
-            corr.transform.localPosition = new Vector3(newNote.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
-            corr.transform.localScale = newNote.NoteTimeLine.transform.localScale;
-            corr.GetComponent<Renderer>().material = NoRes;
-            corr.GetComponentInChildren<TextMesh>().text = "";
-            newNote.corr = corr;
-
+            if (Error)
+            {
+                GameObject corr = Instantiate(NoteTimeLineRef, transform.FindChild("resultsContainer"), false);
+                corr.transform.localPosition = new Vector3(newNote.NoteTimeLine.transform.localPosition.x, Ypos, Z2);
+                corr.transform.localScale = newNote.NoteTimeLine.transform.localScale;
+                corr.GetComponent<Renderer>().material = NoRes;
+                corr.GetComponentInChildren<TextMesh>().text = "";
+                newNote.corr = corr;
+            }
             if (indexToInsert > -1)
                 AddAt(newNote, indexToInsert);
             else
@@ -296,6 +311,17 @@ public class TimeLineScript : MonoBehaviour {
         noteIndex = 0;
 
         StartCoroutine(playMusic());
+    }
+
+    public void Reset()
+    {
+        foreach(Note note in partition)
+        {
+            Destroy(note.NoteTimeLine);
+            Destroy(note.corr);
+        }
+        partition.Clear();
+        Refresh();
     }
 
     public IEnumerator playMusic()

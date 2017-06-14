@@ -21,9 +21,13 @@ public class LevelSelectScript : MonoBehaviour {
 			if (fileName == "level0") {
 				SceneManager.LoadScene ("level1");
 			} else {
-				if (fileName = "") {
-					SceneManager.LoadScene (level);
-				} else {
+				if (fileName == "files") {
+                    gs.fileName = "";
+					SceneManager.LoadScene ("Files");
+				} else if(fileName == "sandbox") {
+                    gs.fileName = "";
+                    SceneManager.LoadScene("SandBox");
+                } else {   
 					SceneManager.LoadScene ("level2");
 				}
 			}

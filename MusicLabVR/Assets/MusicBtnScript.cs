@@ -32,7 +32,8 @@ public class MusicBtnScript : MonoBehaviour {
 		if (gameObject.name.Equals ("playSample")) {
 			if (MFS.Length == 0) {
 				timeLineScript.Save ();
-			} else {
+                Instantiate(prefabWin, transform.parent.parent.parent, true);
+            } else {
 				foreach (MusicFileScript mf in MFS) {
 					mf.Play ();
 				}
@@ -46,8 +47,11 @@ public class MusicBtnScript : MonoBehaviour {
             }
 			timeLineScript.StopAllCoroutines();
         }
-        if (gameObject.name.Equals("rest"))
-			timeLineScript.AddRest();
+        if (gameObject.name.Equals("reset"))
+            timeLineScript.Reset();
+
+        if(gameObject.name.Equals("rest"))
+            timeLineScript.AddRest();
 
 		if (gameObject.name.Equals ("play")) {
 			GameObject gameState = GameObject.Find("GameState");
