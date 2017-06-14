@@ -33,6 +33,8 @@ public class TimeLineScript : MonoBehaviour {
 
     public int indexToInsert;
     
+	public GameObject gameState;
+	private GameState gs;
 
     // list Note and their duration
     public List<Note> partition;
@@ -41,6 +43,9 @@ public class TimeLineScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		GameObject gameState = GameObject.Find("GameState");
+		GameState gs = gameState.GetComponent<GameState>();
+
         nbFourth = 0;
         indexToInsert = -1;
         if (nbLine == 2)
@@ -212,6 +217,11 @@ public class TimeLineScript : MonoBehaviour {
     {
         if (selected)
         {
+			if (gs.tutoInc == 3) {
+				gs.audioSource.Stop;
+				gs.audioSource.PlayOneShot (gs.audioClip [3]);
+				gs.tutoInc = 4;
+			}
             // show the last page (here by giving the partition length, we know it would be over the number of pages)
             if(indexToInsert == -1)
                 showPage(partition.Count);
@@ -236,8 +246,15 @@ public class TimeLineScript : MonoBehaviour {
                 corr.GetComponentInChildren<TextMesh>().text = "";
                 newNote.corr = corr;
             }
-            if (indexToInsert > -1)
-                AddAt(newNote, indexToInsert);
+			if (indexToInsert > -1) {
+				AddAt (newNote, indexToInsert);
+				if (gs.tutoInc == 4) {
+					gs.audioSource.Stop;
+					gs.audioSource.PlayOneShot (gs.audioClip [4]);
+					gs.tutoInc = 5;
+				}
+			}
+				
             else
             {
                 partition.Add(newNote);
@@ -258,6 +275,12 @@ public class TimeLineScript : MonoBehaviour {
     {
         if (selected)
         {
+
+			if (gs.tutoInc == 10) {
+				gs.audioSource.Stop;
+				gs.audioSource.PlayOneShot (gs.audioClip [10]);
+				gs.tutoInc = 11;
+			}
             // show the last page (here by giving the partition length, we know it would be over the number of pages)
             if(indexToInsert==-1)
                 showPage(partition.Count);
@@ -377,6 +400,11 @@ public class TimeLineScript : MonoBehaviour {
 
     public void remove (NoteTimeLineScript toRemove)
     {
+		if (gs.tutoInc == 5) {
+			gs.audioSource.Stop;
+			gs.audioSource.PlayOneShot (gs.audioClip [5]);
+			gs.tutoInc = 6;
+		}
         Note toDestroy = partition[toRemove.partitionIndex];
         partition.RemoveAt(toRemove.partitionIndex);
         Destroy(toDestroy.NoteTimeLine);

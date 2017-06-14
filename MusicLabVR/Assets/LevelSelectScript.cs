@@ -19,6 +19,11 @@ public class LevelSelectScript : MonoBehaviour {
 			gs.neededPercentage = succeedRate;
 			gs.fileName = fileName;
 			if (fileName == "level0") {
+				if (gs.tutoInc == 1) {
+					gs.audioSource.Stop ();
+					gs.audioSource.PlayOneShot (gs.audioClip [1]);
+					gs.tutoInc = 2;
+				}
 				SceneManager.LoadScene ("level1");
 			} else {
 				if (fileName == "files") {
@@ -26,6 +31,11 @@ public class LevelSelectScript : MonoBehaviour {
 					SceneManager.LoadScene ("Files");
 				} else if(fileName == "sandbox") {
                     gs.fileName = "";
+					if (gs.tutoInc == 13) {
+						gs.audioSource.Stop;
+						gs.audioSource.PlayOneShot (gs.audioClip [13]);
+						gs.tutoInc = 14;
+					}
                     SceneManager.LoadScene("SandBox");
                 } else {   
 					SceneManager.LoadScene ("level2");
