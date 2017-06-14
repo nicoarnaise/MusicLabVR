@@ -25,6 +25,7 @@ public class SteamVR_LaserPointer : MonoBehaviour
     public bool addRigidBody = false;
     public Transform reference;
     public TimeLineScript TLS;
+    public CreateFiles CFS;
 
     public event PointerEventHandler PointerIn;
     public event PointerEventHandler PointerOut;
@@ -197,15 +198,31 @@ public class SteamVR_LaserPointer : MonoBehaviour
             Vector2 touchpad = device.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
 
             // handle rotation via touchpad
-            if (touchpad.x > 0.3f)
+            if (TLS)
             {
-                TLS.pageToShow++;
-            }
-            else
-            {
-                if (touchpad.x < -0.3f)
+                if (touchpad.x > 0.3f)
                 {
-                    TLS.pageToShow--;
+                    TLS.pageToShow++;
+                }
+                else
+                {
+                    if (touchpad.x < -0.3f)
+                    {
+                        TLS.pageToShow--;
+                    }
+                }
+            }else if (CFS)
+            {
+                if (touchpad.y > 0.3f)
+                {
+                    CFS.showPrev();
+                }
+                else
+                {
+                    if (touchpad.y < -0.3f)
+                    {
+                        CFS.showNext();
+                    }
                 }
             }
         }
