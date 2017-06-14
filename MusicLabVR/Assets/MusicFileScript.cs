@@ -50,10 +50,7 @@ public class MusicFileScript : MonoBehaviour {
 
 		}
 
-		if (gs.tutoInc == 2 && fileName == "level0") {
-			gs.audioSource.Stop ();
-			gs.audioSource.PlayOneShot (gs.audioClip [1]);
-		}
+
       //  Play();
 	}
 

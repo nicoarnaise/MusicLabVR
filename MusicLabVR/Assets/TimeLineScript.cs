@@ -218,7 +218,7 @@ public class TimeLineScript : MonoBehaviour {
         if (selected)
         {
 			if (gs.tutoInc == 3) {
-				gs.audioSource.Stop;
+				gs.audioSource.Stop();
 				gs.audioSource.PlayOneShot (gs.audioClip [3]);
 				gs.tutoInc = 4;
 			}
@@ -249,7 +249,7 @@ public class TimeLineScript : MonoBehaviour {
 			if (indexToInsert > -1) {
 				AddAt (newNote, indexToInsert);
 				if (gs.tutoInc == 4) {
-					gs.audioSource.Stop;
+					gs.audioSource.Stop();
 					gs.audioSource.PlayOneShot (gs.audioClip [4]);
 					gs.tutoInc = 5;
 				}
@@ -277,7 +277,7 @@ public class TimeLineScript : MonoBehaviour {
         {
 
 			if (gs.tutoInc == 10) {
-				gs.audioSource.Stop;
+				gs.audioSource.Stop();
 				gs.audioSource.PlayOneShot (gs.audioClip [10]);
 				gs.tutoInc = 11;
 			}
@@ -401,7 +401,7 @@ public class TimeLineScript : MonoBehaviour {
     public void remove (NoteTimeLineScript toRemove)
     {
 		if (gs.tutoInc == 5) {
-			gs.audioSource.Stop;
+			gs.audioSource.Stop();
 			gs.audioSource.PlayOneShot (gs.audioClip [5]);
 			gs.tutoInc = 6;
 		}

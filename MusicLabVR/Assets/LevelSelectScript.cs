@@ -32,7 +32,7 @@ public class LevelSelectScript : MonoBehaviour {
 				} else if(fileName == "sandbox") {
                     gs.fileName = "";
 					if (gs.tutoInc == 13) {
-						gs.audioSource.Stop;
+						gs.audioSource.Stop();
 						gs.audioSource.PlayOneShot (gs.audioClip [13]);
 						gs.tutoInc = 14;
 					}
