@@ -31,10 +31,9 @@ public class MusicBtnScript : MonoBehaviour {
 
     public void DoAction()
     {
-		if(transform.parent.parent)
-			timeLineScript = transform.parent.parent.GetComponentInChildren<TimeLineScript> ();
+		timeLineScript = GameObject.Find("EditMenu").GetComponent<TimeLineScript> ();
 
-		if (gameObject.name.Equals ("playSample")) {
+        if (gameObject.name.Equals ("playSample")) {
 			if (MFS.Length == 0) {
 				timeLineScript.Save ();
                 Instantiate(prefabWin, transform.parent.parent.parent, true);

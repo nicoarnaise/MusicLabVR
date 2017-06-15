@@ -36,16 +36,11 @@ public class SteamVR_LaserPointer : MonoBehaviour
 
     Transform previousContact = null;
 
-	public GameObject gameState;
-	private GameState gs;
+	
 
 	// Use this for initialization
 	void Start ()
     {
-
-		gameState = GameObject.Find("GameState");
-		gs = gameState.GetComponent<GameState>();
-
         triggerPressedBefore = false;
         touchedBefore = false;
 
@@ -162,15 +157,8 @@ public class SteamVR_LaserPointer : MonoBehaviour
 				MenuPrefScript MP = hit.transform.GetComponent<MenuPrefScript> ();
 				LevelSelectScript LS = hit.transform.GetComponent<LevelSelectScript> ();
 
-				if (NS) {
-					
-					if (gs.tutoInc == 2) {
-						gs.audioSource.Stop ();
-						gs.audioSource.PlayOneShot (gs.audioClip [2]);
-						gs.tutoInc = 3;
-					}
-					NS.Play ();
-				}
+                if (NS)
+                    NS.Play();
 				if (LB)
 					LB.Select ();
 				if (MB)

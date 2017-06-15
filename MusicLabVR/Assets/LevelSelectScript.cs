@@ -8,11 +8,27 @@ public class LevelSelectScript : MonoBehaviour {
 	public int level;
 	public float succeedRate = 80f;
 	public string fileName;
+    public bool doAct = false;
 
 	private GameObject gameState;
 	private GameState gs;
 
-		public void EnterLevel (){
+    void Start()
+    {
+        gameState = GameObject.Find("GameState");
+        gs = gameState.GetComponent<GameState>();
+    }
+
+    void Update()
+    {
+        if (doAct)
+        {
+            doAct = false;
+            EnterLevel();
+        }
+    }
+
+	public void EnterLevel (){
 		if (level == 0) {
 			Quit ();
 		} else {
@@ -42,18 +58,16 @@ public class LevelSelectScript : MonoBehaviour {
 				}
 			}
 		}
-		}
+	}
 
-		public void Quit()
-		{
-			#if UNITY_EDITOR
-			UnityEditor.EditorApplication.isPlaying = false;
-			#else
-			Application.Quit ();
-			#endif
-
-		}
-
+	public void Quit()
+	{
+		#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+		#else
+		Application.Quit ();
+		#endif
+	}
 
 }
 

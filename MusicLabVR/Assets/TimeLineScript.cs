@@ -43,8 +43,8 @@ public class TimeLineScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GameObject gameState = GameObject.Find("GameState");
-		GameState gs = gameState.GetComponent<GameState>();
+		gameState = GameObject.Find("GameState");
+		gs = gameState.GetComponent<GameState>();
 
         nbFourth = 0;
         indexToInsert = -1;
@@ -228,7 +228,7 @@ public class TimeLineScript : MonoBehaviour {
 
             GameObject newNoteGO = Instantiate(NoteTimeLineRef, transform, false);
             newNoteGO.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + (selected.value * 2) - 1), Ypos,Z1);
-            newNoteGO.transform.localScale = new Vector3(newNoteGO.transform.localScale.x * (selected.value * 4), newNoteGO.transform.localScale.y, newNoteGO.transform.localScale.z);
+            newNoteGO.transform.localScale = new Vector3(0.02f * (selected.value * 4), 1, 0.4f);
             if(addon != "")
                 newNoteGO.GetComponentInChildren<TextMesh>().text = "" + Octave + "\n" + addon;
             else
@@ -287,10 +287,10 @@ public class TimeLineScript : MonoBehaviour {
 
             GameObject newNoteGO = Instantiate(NoteTimeLineRef, transform, false);
             newNoteGO.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + (selected.value * 2) - 1), Ypos, Z1);
-            newNoteGO.transform.localScale = new Vector3(newNoteGO.transform.localScale.x * (selected.value * 4), newNoteGO.transform.localScale.y, newNoteGO.transform.localScale.z);
+            newNoteGO.transform.localScale = new Vector3(0.02f * (selected.value * 4), 1, 0.4f);
             newNoteGO.GetComponentInChildren<TextMesh>().text = "";
            
-            Note newNote = new Note(newNoteGO, null, pageShown, partition.Count - 1, (int)(selected.value * 4));
+            Note newNote = new Note(newNoteGO, null, pageShown, partition.Count, (int)(selected.value * 4));
 
             if (Error)
             {

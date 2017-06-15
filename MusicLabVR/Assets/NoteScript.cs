@@ -15,13 +15,19 @@ public class NoteScript : MonoBehaviour {
 
     private int refresh;
 
-	// Use this for initialization
-	void Start () {
+    public GameObject gameState;
+    private GameState gs;
+
+    // Use this for initialization
+    void Start () {
         refresh = 0;
         audioS = transform.GetComponent<AudioSource>();
         rend = transform.GetComponent<Renderer>();
         TimeLine = transform.parent.parent.GetComponent<OctaveScript>().TimeLine;
         Octave = transform.parent.parent.GetComponent<OctaveScript>().Octave;
+
+        gameState = GameObject.Find("GameState");
+        gs = gameState.GetComponent<GameState>();
     }
 
     void Update()
@@ -42,6 +48,12 @@ public class NoteScript : MonoBehaviour {
     }
 
     public void Play(){
+        if (gs.tutoInc == 2)
+        {
+            gs.audioSource.Stop();
+            gs.audioSource.PlayOneShot(gs.audioClip[2]);
+            gs.tutoInc = 3;
+        }
         audioS.Play();
         string addon = "";
         if (transform.name.EndsWith("b"))
