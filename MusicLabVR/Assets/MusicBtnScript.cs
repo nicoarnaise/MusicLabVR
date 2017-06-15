@@ -109,6 +109,7 @@ public class MusicBtnScript : MonoBehaviour {
 				gs.audioSource.PlayOneShot (gs.audioClip [12]);
 				gs.tutoInc = 13;
 			}
+            gs.waitForSceneLoad = true;
             SceneManager.LoadScene(0);
 		}
 			

@@ -78,8 +78,11 @@ public class TimeLineScript : MonoBehaviour {
         {
             note.setIndexInPartition(index);
             index++;
-            note.corr.GetComponent<Renderer>().material = NoRes;
-            note.corr.GetComponentInChildren<TextMesh>().text = "";
+            if (note.corr)
+            {
+                note.corr.GetComponent<Renderer>().material = NoRes;
+                note.corr.GetComponentInChildren<TextMesh>().text = "";
+            }
             if (note.NoteTimeLine.activeSelf)
             {
                 note.NoteTimeLine.SetActive(false);
@@ -94,7 +97,7 @@ public class TimeLineScript : MonoBehaviour {
 				Note note = partition [index];
 				while (nbFourth + note.nbFourth < nbFourthMax) {
 					if (page == pageShown) {
-						note.NoteTimeLine.transform.localPosition = new Vector3 (startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
+						note.NoteTimeLine.transform.localPosition = new Vector3 (startX + spaceX * (nbFourth + (float) note.nbFourth / 2 - 1), Ypos, Z1);
                         note.NoteTimeLine.SetActive(true);
                         if (note.corr)
                         {
@@ -144,7 +147,7 @@ public class TimeLineScript : MonoBehaviour {
         if(pToShow < pageShown && pToShow > -1 || pToShow > pageShown && !partition[partition.Count-1].NoteTimeLine.activeSelf)
         {
             if (GetComponentInChildren<MenuPrefScript>())
-                Destroy(GetComponentInChildren<MenuPrefScript>().transform.parent.gameObject);
+                Destroy(GetComponentInChildren<MenuPrefScript>().gameObject);
 
             pageToShow = pToShow;
             int index = 0;
@@ -170,7 +173,7 @@ public class TimeLineScript : MonoBehaviour {
                 {
                     if (page == pageShown)
                     {
-                        note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
+                        note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + (float) note.nbFourth / 2 - 1), Ypos, Z1);
                         note.NoteTimeLine.SetActive(true);
                         if (note.corr)
                         {
@@ -197,7 +200,7 @@ public class TimeLineScript : MonoBehaviour {
                     while (index < partition.Count)
                     {
                         note = partition[index];
-                        note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + note.nbFourth / 2 - 1), Ypos, Z1);
+                        note.NoteTimeLine.transform.localPosition = new Vector3(startX + spaceX * (nbFourth + (float) note.nbFourth / 2 - 1), Ypos, Z1);
                         note.NoteTimeLine.SetActive(true);
                         if (note.corr)
                         {
@@ -215,7 +218,7 @@ public class TimeLineScript : MonoBehaviour {
 
     public void AddNote(NoteScript noteS, int Octave, string addon)
     {
-        if (selected)
+        if (selected && !GetComponentInChildren<MenuPrefScript>())
         {
 			if (gs.tutoInc == 3) {
 				gs.audioSource.Stop();
@@ -258,7 +261,7 @@ public class TimeLineScript : MonoBehaviour {
             else
             {
                 partition.Add(newNote);
-                if (nbFourth + selected.value * 4 > nbFourthMax)
+                if (nbFourth + newNote.nbFourth > nbFourthMax)
                 {
                     newNote.NoteTimeLine.SetActive(false);
                     showPage(pageShown + 1);
@@ -273,7 +276,7 @@ public class TimeLineScript : MonoBehaviour {
 
     public void AddRest()
     {
-        if (selected)
+        if (selected && !GetComponentInChildren<MenuPrefScript>())
         {
 
 			if (gs.tutoInc == 10) {
@@ -306,7 +309,7 @@ public class TimeLineScript : MonoBehaviour {
             else
             {
                 partition.Add(newNote);
-                if (nbFourth + selected.value * 4 > nbFourthMax)
+                if (nbFourth + newNote.nbFourth > nbFourthMax)
                 {
                     newNote.NoteTimeLine.SetActive(false);
                     showPage(pageShown + 1);

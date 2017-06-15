@@ -31,17 +31,19 @@ public class SteamVR_LaserPointer : MonoBehaviour
     public event PointerEventHandler PointerIn;
     public event PointerEventHandler PointerOut;
 
-    private bool triggerPressedBefore;
     private bool touchedBefore;
 
     Transform previousContact = null;
 
-	
+    public GameObject gameState;
+    private GameState gs;
 
 	// Use this for initialization
 	void Start ()
     {
-        triggerPressedBefore = false;
+        gameState = GameObject.Find("GameState");
+        gs = gameState.GetComponent<GameState>();
+
         touchedBefore = false;
 
         holder = new GameObject();
@@ -147,10 +149,10 @@ public class SteamVR_LaserPointer : MonoBehaviour
 		if (hit.transform) {
 
 			if (NS && !NS.transform.parent.parent.GetComponent<OctaveScript> ().TimeLine.GetComponent<TimeLineScript> ().selected)
-				triggerPressedBefore = false;
+				gs.triggerPressedBefore = false;
 
-			if (controller != null && controller.triggerPressed && !triggerPressedBefore) {
-				triggerPressedBefore = true;
+			if (controller != null && controller.triggerPressed && !gs.triggerPressedBefore) {
+				gs.triggerPressedBefore = true;
 				LengthBtnScript LB = hit.transform.GetComponent<LengthBtnScript> ();
 				MusicBtnScript MB = hit.transform.GetComponent<MusicBtnScript> ();
 				NoteTimeLineScript NTL = hit.transform.GetComponent<NoteTimeLineScript> ();
@@ -171,15 +173,18 @@ public class SteamVR_LaserPointer : MonoBehaviour
 					LS.EnterLevel ();
 				pointer.transform.localScale = new Vector3 (thickness * 5f, thickness * 5f, dist);
 			} else {
-				if (controller != null && !controller.triggerPressed)
-					triggerPressedBefore = false;
+				if (controller != null && !controller.triggerPressed && !gs.waitForSceneLoad)
+					gs.triggerPressedBefore = false;
 			}
 		}
-		if (!(controller != null && controller.triggerPressed && !triggerPressedBefore))
+		if (!(controller != null && controller.triggerPressed && !gs.triggerPressedBefore))
 			pointer.transform.localScale = new Vector3 (thickness, thickness, dist);
 
         if (controller != null && controller.gripped)
+        {
+            gs.waitForSceneLoad = true;
             SceneManager.LoadScene(0);
+        }
 
         SteamVR_Controller.Device device = SteamVR_Controller.Input((int)controller.controllerIndex);
         //If finger is on touchpad

@@ -40,10 +40,12 @@ public class LevelSelectScript : MonoBehaviour {
 					gs.audioSource.PlayOneShot (gs.audioClip [1]);
 					gs.tutoInc = 2;
 				}
+                gs.waitForSceneLoad = true;
 				SceneManager.LoadScene ("level1");
 			} else {
 				if (fileName == "files") {
                     gs.fileName = "";
+                    gs.waitForSceneLoad = true;
 					SceneManager.LoadScene ("Files");
 				} else if(fileName == "sandbox") {
                     gs.fileName = "";
@@ -52,8 +54,10 @@ public class LevelSelectScript : MonoBehaviour {
 						gs.audioSource.PlayOneShot (gs.audioClip [13]);
 						gs.tutoInc = 14;
 					}
+                    gs.waitForSceneLoad = true;
                     SceneManager.LoadScene("SandBox");
-                } else {   
+                } else {
+                    gs.waitForSceneLoad = true;
 					SceneManager.LoadScene ("level2");
 				}
 			}

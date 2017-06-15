@@ -29,15 +29,18 @@ public class NoteTimeLineScript : MonoBehaviour {
     public void openMenu()
     {
         if (transform.parent.GetComponentInChildren<MenuPrefScript>())
-            Destroy(transform.parent.GetComponentInChildren<MenuPrefScript>().transform.parent.gameObject);
+            Destroy(transform.parent.GetComponentInChildren<MenuPrefScript>().gameObject);
 
         if (hasMenuOpened)
             Destroy(childMenu);
         else
         {
-            childMenu = Instantiate(menuPref, transform.parent, false);
-            childMenu.transform.localPosition = new Vector3(transform.localPosition.x, 0.003f, menuZ);
-            childMenu.GetComponent<MenuPrefScript>().target = this;
+            if (transform.parent.name.Equals("EditMenu"))
+            {
+                childMenu = Instantiate(menuPref, transform.parent, false);
+                childMenu.transform.localPosition = new Vector3(transform.localPosition.x, 0.003f, menuZ);
+                childMenu.GetComponent<MenuPrefScript>().target = this;
+            }
         }
     }
 }
